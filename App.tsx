@@ -1,20 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from './src/screens/HomeScreen';
+import StoryScreen from './src/screens/StoryScreen';
+import { ModeProvider, useMode } from './src/ModeContext';
 
-export default function App() {
+export type RootStackParamList = {
+  Home: undefined;
+  Story: { storyId: string };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
+function Navigation() {
+  const { theme } = useMode();
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: theme.headerBg },
+          headerTitleStyle: { color: theme.text, fontWeight: '800' },
+          headerTintColor: theme.text,
+          headerShadowVisible: false,
+          contentStyle: { backgroundColor: theme.bg },
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Story" component={StoryScreen} options={{ title: '' }} />
+      </Stack.Navigator>
+      <StatusBar style={theme.statusBar} />
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <ModeProvider>
+      <Navigation />
+    </ModeProvider>
+  );
+}
