@@ -1,4 +1,6 @@
 import { Story } from '../types';
+import { STYLE } from './illustrationStyle';
+import { EGYPTIAN_STORIES } from './egyptianStories';
 
 /**
  * Starter library: two public-domain Aesop's fables plus two Egyptian stories
@@ -20,9 +22,8 @@ import { Story } from '../types';
  *   gentle rounded shapes, thick soft outlines, no text, no lettering.
  */
 
-const STYLE = 'soft watercolour children’s book illustration, warm Egyptian palette, gentle rounded shapes, thick soft outlines, no text, no lettering';
 
-export const STORIES: Story[] = [
+const CORE_STORIES: Story[] = [
   {
     id: 'star-on-the-nile',
     emoji: '🌙',
@@ -267,3 +268,9 @@ export const STORIES: Story[] = [
     ],
   },
 ];
+
+/**
+ * The full library. Order here is the order stories appear on the home screen
+ * before filtering; the age and bedtime/daytime filters do the real narrowing.
+ */
+export const STORIES: Story[] = [...CORE_STORIES, ...EGYPTIAN_STORIES];

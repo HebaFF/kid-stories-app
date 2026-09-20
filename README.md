@@ -22,7 +22,7 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ## What's here
 
 **Expo (React Native) app, TypeScript, SDK 57.** iOS, Android and web from one
-codebase. Four stories in `src/data/stories.ts`.
+codebase. Ten stories, seven of them Egyptian.
 
 ### Two Arabic tracks, plus English
 
@@ -66,15 +66,42 @@ Credit budget, style lock, character consistency and the review gate are in
 
 ## Stories
 
-| Story | Ages | When | Length |
-|---|---|---|---|
-| نجمة على النيل / A Star on the Nile | 2–4 | Bedtime | 3 min |
-| السلحفاة والأرنب / The Tortoise and the Hare | 2–4, 5–7 | Any | 4 min |
-| جحا وابنه والحمار / Juha, His Son and the Donkey | 5–7, 8–10 | Daytime | 5 min |
-| الراعي الكذاب / The Boy Who Cried Wolf | 5–7, 8–10 | Daytime | 5 min |
+Ten stories, in `src/data/`.
 
-Two Aesop's fables (public domain), one Egyptian folk tale, one original
-bedtime story.
+| Story | Ages | When | Length | Source |
+|---|---|---|---|---|
+| نجمة على النيل / A Star on the Nile | 2–4 | Bedtime | 3 min | Original |
+| مركب الشمس في الليل / The Sun's Night Boat | 2–4 | Bedtime | 3 min | Ancient Egyptian myth |
+| القطة اللي حرست البيت / The Cat Who Guarded the House | 2–4, 5–7 | Bedtime | 4 min | Ancient Egyptian tradition |
+| السلحفاة والأرنب / The Tortoise and the Hare | 2–4, 5–7 | Any | 4 min | Aesop |
+| الأسد والأرنب الشاطر / The Lion and the Clever Hare | 5–7 | Any | 4 min | Kalila wa Dimna |
+| جحا وابنه والحمار / Juha, His Son and the Donkey | 5–7, 8–10 | Daytime | 5 min | Egyptian folk tale |
+| مسمار جحا / Juha's Nail | 5–7, 8–10 | Daytime | 4 min | Egyptian folk tale |
+| الملاح الغريق / The Shipwrecked Sailor | 5–7, 8–10 | Daytime | 6 min | Ancient Egyptian, c. 1900 BCE |
+| الراعي الكذاب / The Boy Who Cried Wolf | 5–7, 8–10 | Daytime | 5 min | Aesop |
+| الشاطر حسن وسؤال السلطان / Clever Hassan | 8–10 | Daytime | 5 min | Egyptian folk tale |
+
+Seven of the ten are Egyptian — ancient tales, Juha, Kalila wa Dimna and the
+folk-hero tradition. That is the point of the app, not decoration.
+
+### On copyright
+
+Everything here is built on material that is out of copyright: tales that are
+centuries or millennia old.
+
+**But a public-domain tale does not make somebody's retelling of it free to
+copy.** A specific published version, a translation, or a website's wording
+belongs to its author. So every word in this app is an original retelling
+written from the traditional plot.
+
+Keep that rule when adding stories: **take the plot, write your own words.**
+
+- `src/data/stories.ts` — the general collection
+- `src/data/egyptianStories.ts` — the Egyptian collection
+- `src/data/illustrationStyle.ts` — the shared art style both use
+
+Adding a story means copying one block and changing the text. No other file
+needs touching.
 
 ## Before this goes in front of children
 
