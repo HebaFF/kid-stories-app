@@ -13,6 +13,8 @@ import {
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { STORIES } from '../data/stories';
 import { LANGUAGES, LanguageCode } from '../types';
+import { useVideoPlayer, VideoView } from 'expo-video';
+import { animationFor } from '../data/animations';
 import { illustrationFor } from '../data/illustrations';
 import { useMode } from '../ModeContext';
 import type { RootStackParamList } from '../../App';
@@ -61,6 +63,17 @@ export default function StoryScreen({ route, navigation }: Props) {
   const isArabic = language === 'ar-EG' || language === 'ar-MSA';
   const page = story.pages[pageIndex];
   const illustration = illustrationFor(story.id, pageIndex);
+  const animation = animationFor(story.id, pageIndex);
+
+  // The hook has to run on every render, so a page with no clip passes null
+  // and simply renders nothing. Clips are silent and looped: five seconds is
+  // shorter than a page takes to read, and a soundtrack would fight the
+  // narration once that exists.
+  const player = useVideoPlayer(animation ?? null, (instance) => {
+    instance.loop = true;
+    instance.muted = true;
+    instance.play();
+  });
   const isLastPage = pageIndex === story.pages.length - 1;
   const isFirstPage = pageIndex === 0;
 
@@ -110,6 +123,17 @@ export default function StoryScreen({ route, navigation }: Props) {
       pan.stop();
     };
   }, [pageIndex, language, entrance, drift]);
+
+  // The setup callback passed to useVideoPlayer runs when the player is built,
+  // which can be before the source is ready — the clip then sits paused on its
+  // first frame. Asking again once the page's clip is resolved is what actually
+  // starts it.
+  useEffect(() => {
+    if (!animation) return;
+    player.loop = true;
+    player.muted = true;
+    player.play();
+  }, [animation, player, pageIndex]);
 
   // Alternating direction per page stops the drift looking mechanical when a
   // parent turns several pages in a row.
@@ -193,7 +217,16 @@ export default function StoryScreen({ route, navigation }: Props) {
             entranceStyle,
           ]}
         >
-          {illustration ? (
+          {animation ? (
+            <View style={styles.illustrationFrame}>
+              <VideoView
+                player={player}
+                style={styles.illustration}
+                contentFit="cover"
+                nativeControls={false}
+              />
+            </View>
+          ) : illustration ? (
             <View style={styles.illustrationFrame}>
               <Animated.Image
                 source={illustration}

@@ -111,26 +111,59 @@ originally typed into Higgsfield — it is in the repo.
 
 ## 2. Animation
 
-The pages move, but not because the art is video.
+Pages can move in two ways, and the app supports both on a per-page basis.
 
-Each illustration drifts slowly — a gentle scale and pan over 16 seconds, out
-and back, alternating direction per page — and each page fades and rises as it
-arrives. It is the old "Ken Burns" trick, and on a still watercolour it reads
-as the picture breathing rather than as a video playing.
+### Real video clips (Higgsfield "Create Video")
 
-This is deliberate rather than a compromise:
+Any generated still has a **Create Video** action that animates it with Kling
+3.0. Measured on 22 September 2026:
 
-- **Cost.** Stills are 6.5 credits; a 5s clip is ~45. The whole library is
-  ~293 credits as stills and ~2,000 as video.
-- **Size.** The four JPEGs for one story are 1.5MB. Four video clips would be
-  tens of megabytes, for one story out of ten.
-- **Bedtime.** A looping video is something a child watches. A slow drift is
-  something they read past. For a story meant to end in sleep, the quieter
-  option is the better one.
+| | Value |
+|---|---|
+| Cost | **10 credits** per 5s clip |
+| Output | 1108x828 (4:3), ~5.0s, ~3.4MB |
+| Render time | several minutes, much slower than a still |
 
-Higgsfield's **Turn to video** button on any generated image is the upgrade
-path if a particular story deserves real motion — a title page, say. Treat it
-as a deliberate, per-story spend, not the default.
+Note the UI labels the option "720p" and the details panel says "720x720", but
+the delivered file is 1108x828 — 4:3, matching the reader's image slot. Do not
+design around the label.
+
+At 10 credits a clip, the full ten-story library is about 450 credits rather
+than the ~2,000 an earlier estimate assumed. Credits are not the binding
+constraint.
+
+**File size is.** A clip is roughly ten times the weight of the still it came
+from: 3.4MB against 370KB. Four clips bundle fine; all forty-five pages would
+be around 150MB, which is past what belongs inside an app download. Beyond a
+handful of stories the clips need hosting and streaming — and that means
+bedtime needs a working connection, which is exactly when connections are
+worst. Decide this before animating the whole library.
+
+Clips play silent and looped. Five seconds is shorter than a page takes to
+read, and a soundtrack would fight the narration once that exists.
+
+Prompt them for restraint. The prompt that worked asked for a swaying curtain,
+slow breathing, faint shimmer on the water and a distant drifting boat, and
+explicitly said "keep the hand-painted watercolour picture-book style exactly,
+no camera shake, no zoom". Video models will happily add a dolly move and turn
+watercolour into plastic if not told otherwise.
+
+### Drift on the still (free)
+
+Pages with no clip animate their still instead: a slow scale and pan over seven
+seconds, out and back, alternating direction per page. It costs nothing, adds
+no weight, and on a still watercolour reads as the picture breathing.
+
+An earlier pass had this at 14px over 16 seconds — about one pixel per second,
+which is invisible. If it looks static, it is tuned too low; the constants are
+named at the top of `StoryScreen.tsx`.
+
+### Playback
+
+`expo-video`, muted and looping. `player.play()` inside the `useVideoPlayer`
+setup callback is not enough — it can run before the source is ready and the
+clip sits paused on its first frame. An effect that calls `play()` once the
+page's clip is resolved is what actually starts it.
 
 ## 3. Narration — deferred
 

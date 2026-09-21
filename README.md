@@ -56,25 +56,25 @@ to the other without losing their place.
 
 ### Illustrations, and how they move
 
-**مركب الشمس في الليل / The Sun's Night Boat is fully illustrated** — four
-Higgsfield watercolours bundled in `assets/illustrations/sun-boat/`. The other
-nine stories fall back to their emoji until their art is generated, so the app
-is fully usable either way.
+**مركب الشمس في الليل / The Sun's Night Boat is illustrated** — four Higgsfield
+watercolours in `assets/illustrations/sun-boat/`. Its final page is a real
+**looping video clip**; the rest are stills. The other nine stories fall back
+to their emoji until their art is generated, so the app works either way.
 
-The pages animate without any video. Each illustration drifts slowly — a gentle
-scale and pan over 16 seconds, out and back, alternating direction per page —
-and each page fades and rises as it arrives. On a still watercolour it reads as
-the picture breathing.
+Two kinds of motion, per page:
 
-That is a choice, not a limitation: a still costs 6.5 credits and a 5-second
-video clip costs about 45, and four JPEGs weigh 1.5MB where four clips would be
-tens of megabytes. A looping video is also something a child *watches*; a slow
-drift is something they read past, which is what a bedtime story wants.
+- **Video clips** (`src/data/animations.ts`) — 5-second Kling 3.0 renders,
+  silent and looped, 10 credits each.
+- **Drift** — pages without a clip scale and pan their still slowly instead,
+  which costs nothing and adds no weight.
 
-Each page stores the Higgsfield prompt that produced its art, so any page can
-be regenerated later in the same style. Credit costs, the style lock, character
-consistency and the review gate are in
-**[docs/HIGGSFIELD.md](docs/HIGGSFIELD.md)**.
+The constraint on doing video everywhere is **size, not credits**: a clip is
+~3.4MB against ~370KB for its still. All forty-five pages as video would be
+roughly 150MB, too big to ship inside an app, so the full library would need
+the clips hosted and streamed — and that means bedtime needs a connection.
+
+Each page stores the Higgsfield prompt that produced its art. Costs, prompting
+notes and the review gate are in **[docs/HIGGSFIELD.md](docs/HIGGSFIELD.md)**.
 
 ## Stories
 
