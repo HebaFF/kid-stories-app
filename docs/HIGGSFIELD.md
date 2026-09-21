@@ -20,27 +20,33 @@ Why it matters:
 
 ## 1. Illustrations (Higgsfield)
 
-### Credit budget
+### Credit budget — measured, not estimated
 
-Higgsfield charges per generation, and the gap between stills and video is
-large enough to decide the art direction for you:
+Published guides claim roughly 2 credits per image. That is wrong. Measured in
+the account on 21 September 2026, generating at **GPT Image 2 / 2K / High**:
 
-| Output | Approx. credits | What a 5-page story costs |
+| Output | Credits | A 4-page story |
 |---|---|---|
-| Still image | ~2 | ~10 credits |
-| 5s 1080p video clip | ~45 | ~225 credits |
+| Still image | **6.5** | 26 |
+| 5s video clip | ~45 | ~180 |
 
-On a Starter plan (270 credits/month, ~$19):
+On the Pro plan's 610 credits that is about **93 stills**, or all 45 pages of
+the current ten-story library for ~293 credits — roughly half the balance.
+Video for the same library would cost about 2,000 credits, which is why the
+library is illustrated with stills and animated in the app instead (see
+"Animation" below).
 
-- **Stills:** roughly **27 five-page stories a month**. Comfortable.
-- **Video:** barely **one** story a month. Not viable as the default.
+Cheaper models are available (Nano Banana 2 Lite is the budget option) if the
+whole library needs doing at once.
 
-So: **stills for every story.** Reserve video for a small number of hero
-stories or a store trailer, and budget them as a separate, deliberate spend.
-
-Note that Starter is the one tier with no annual discount — pay monthly.
 Credits do not roll over, so generate in batches near the start of a cycle
 rather than letting an allocation expire.
+
+### Generation is slow
+
+A single 2K image took roughly 90 seconds. Submitting several in a row queues
+them and they render in parallel, which is much faster than waiting for each —
+three queued images finished in about the time two sequential ones would.
 
 ### Style lock
 
@@ -53,6 +59,16 @@ constant:
 Keep it in every prompt. Without it, pages drift into different styles and the
 story stops looking like one book. `no text, no lettering` matters especially:
 image models produce garbled pseudo-Arabic that looks alarming to a parent.
+
+### Say who is *not* in the scene
+
+The first image generated for this app came back with four child passengers
+aboard the sun boat. The story has no passengers — the sun sails alone while a
+child sleeps. The model filled the empty deck because nothing told it not to.
+
+Scene prompts therefore state explicitly who is present and who is absent
+("no people in the foreground", "only one child"). This costs nothing and
+removed the problem on the next three pages.
 
 ### Character consistency
 
@@ -93,7 +109,30 @@ originally typed into Higgsfield — it is in the repo.
 
 ---
 
-## 2. Narration — deferred
+## 2. Animation
+
+The pages move, but not because the art is video.
+
+Each illustration drifts slowly — a gentle scale and pan over 16 seconds, out
+and back, alternating direction per page — and each page fades and rises as it
+arrives. It is the old "Ken Burns" trick, and on a still watercolour it reads
+as the picture breathing rather than as a video playing.
+
+This is deliberate rather than a compromise:
+
+- **Cost.** Stills are 6.5 credits; a 5s clip is ~45. The whole library is
+  ~293 credits as stills and ~2,000 as video.
+- **Size.** The four JPEGs for one story are 1.5MB. Four video clips would be
+  tens of megabytes, for one story out of ten.
+- **Bedtime.** A looping video is something a child watches. A slow drift is
+  something they read past. For a story meant to end in sleep, the quieter
+  option is the better one.
+
+Higgsfield's **Turn to video** button on any generated image is the upgrade
+path if a particular story deserves real motion — a title page, say. Treat it
+as a deliberate, per-story spend, not the default.
+
+## 3. Narration — deferred
 
 **The app has no audio right now.** It is a reading app: Arabic and English
 text, filters, illustrations. That is deliberate, not unfinished.
@@ -140,7 +179,7 @@ Worth deciding once, when the first real audio file exists.
 Higgsfield does not publish an audio credit table. Check what one page actually
 costs inside your own account before budgeting a full library.
 
-## 3. Review checklist before a story ships
+## 4. Review checklist before a story ships
 
 - [ ] Egyptian colloquial text read aloud by a native speaker and corrected
 - [ ] MSA text checked for school-appropriate vocabulary and harakat

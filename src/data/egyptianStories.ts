@@ -39,7 +39,7 @@ export const EGYPTIAN_STORIES: Story[] = [
     },
     pages: [
       {
-        illustration: `${STYLE}. A golden boat sailing high across a wide blue daytime sky above the Nile and green fields, the sun glowing warmly on its deck, ancient Egyptian styling, calm and wondrous`,
+        illustration: `${STYLE}. A golden ancient Egyptian solar barque with a falcon prow and Eye of Horus, sailing high across a wide blue daytime sky above the Nile, green fields and distant pyramids below, the sun glowing warmly above it, calm and wondrous`,
         text: {
           en: 'All day long, the sun sails across the sky in a golden boat. It sails slowly, from one side of the sky to the other, warming the fields below.',
           'ar-EG': 'طول النهار، الشمس بتبحر في السما في مركب دهبية. بتمشي بالراحة، من ناحية للناحية التانية، وبتدفي الغيطان اللي تحت.',
@@ -47,7 +47,7 @@ export const EGYPTIAN_STORIES: Story[] = [
         },
       },
       {
-        illustration: `${STYLE}. The golden boat sinking low behind western desert hills at sunset, the sky washed orange then deep violet, palm trees in silhouette, peaceful end-of-day mood`,
+        illustration: `${STYLE}. The same golden Egyptian solar barque with falcon prow and Eye of Horus, seen small and distant, sinking low behind western desert hills at sunset, sky washed orange then deep violet, palm trees in silhouette along the Nile, peaceful end of day, no people in the foreground`,
         text: {
           en: 'When evening comes, the boat sails down behind the hills in the west. The sky turns orange, then pink, then a deep soft purple.',
           'ar-EG': 'ولما بييجي المغرب، المركب بتنزل ورا التلال في الغرب. السما بتبقى برتقالي، وبعدين وردي، وبعدين بنفسجي غامق وهادي.',
@@ -55,7 +55,7 @@ export const EGYPTIAN_STORIES: Story[] = [
         },
       },
       {
-        illustration: `${STYLE}. The golden boat gliding quietly through a deep starry blue-black underworld river beneath the sleeping land, soft glowing stars above, utterly calm, dreamlike not frightening`,
+        illustration: `${STYLE}. The same golden Egyptian solar barque gliding quietly through a deep starry blue-black underworld river beneath the sleeping land, soft glowing stars above, no people, utterly calm and dreamlike, not frightening`,
         text: {
           en: 'All night, the little boat sails quietly underneath the world, through the dark. It never stops. And up above, the stars stay awake and keep watch.',
           'ar-EG': 'وطول الليل، المركب الصغيرة بتبحر بهدوء تحت الدنيا، في الضلمة. عمرها ما بتقف. وفوق، النجوم بتفضل صاحية وبتحرس.',
@@ -63,7 +63,7 @@ export const EGYPTIAN_STORIES: Story[] = [
         },
       },
       {
-        illustration: `${STYLE}. Soft pink dawn light rising over the eastern Nile horizon, the golden boat reappearing gently, a sleeping child's window with warm light falling in, reassuring and tender`,
+        illustration: `${STYLE}. Soft pink dawn light rising over the eastern Nile horizon, the same golden Egyptian solar barque reappearing small on the horizon, and in the foreground one single small child asleep in bed beside an open window with warm dawn light falling in, only one child, reassuring and tender`,
         text: {
           en: 'And every single morning, the boat comes back up in the east. So close your eyes now. The boat is sailing, and the sun will be here when you wake up.',
           'ar-EG': 'وكل يوم الصبح، المركب بترجع تطلع من الشرق. فاقفلي عينيكي دلوقتي. المركب ماشية، والشمس هتكون هنا لما تصحي.',

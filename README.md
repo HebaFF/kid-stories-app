@@ -54,14 +54,26 @@ to the other without losing their place.
 - Night mode is warm and low-contrast rather than stark black, for reading in a
   dark room.
 
-### Illustrations
+### Illustrations, and how they move
 
-Each page carries the Higgsfield prompt that generated (or will generate) its
-art, stored next to the text so pages can be regenerated consistently later.
-Set `imageUri` on a page and the reader renders the image; until then it falls
-back to the story's emoji, so the app is fully usable while art is in progress.
+**مركب الشمس في الليل / The Sun's Night Boat is fully illustrated** — four
+Higgsfield watercolours bundled in `assets/illustrations/sun-boat/`. The other
+nine stories fall back to their emoji until their art is generated, so the app
+is fully usable either way.
 
-Credit budget, style lock, character consistency and the review gate are in
+The pages animate without any video. Each illustration drifts slowly — a gentle
+scale and pan over 16 seconds, out and back, alternating direction per page —
+and each page fades and rises as it arrives. On a still watercolour it reads as
+the picture breathing.
+
+That is a choice, not a limitation: a still costs 6.5 credits and a 5-second
+video clip costs about 45, and four JPEGs weigh 1.5MB where four clips would be
+tens of megabytes. A looping video is also something a child *watches*; a slow
+drift is something they read past, which is what a bedtime story wants.
+
+Each page stores the Higgsfield prompt that produced its art, so any page can
+be regenerated later in the same style. Credit costs, the style lock, character
+consistency and the review gate are in
 **[docs/HIGGSFIELD.md](docs/HIGGSFIELD.md)**.
 
 ## Stories

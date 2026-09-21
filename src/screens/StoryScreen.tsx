@@ -1,12 +1,27 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Animated,
+  Easing,
+  Image,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { STORIES } from '../data/stories';
 import { LANGUAGES, LanguageCode } from '../types';
+import { illustrationFor } from '../data/illustrations';
 import { useMode } from '../ModeContext';
 import type { RootStackParamList } from '../../App';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Story'>;
+
+// react-native-web has no native animation driver, so transforms there must be
+// driven from JS. On device the native driver keeps the drift off the JS thread.
+const useNativeDriver = Platform.OS !== 'web';
 
 export default function StoryScreen({ route, navigation }: Props) {
   const { theme, night } = useMode();
@@ -21,10 +36,18 @@ export default function StoryScreen({ route, navigation }: Props) {
   const [pageIndex, setPageIndex] = useState(0);
   const [showEnglish, setShowEnglish] = useState(false);
 
+  // Two animations run on every page: a fade/rise as the page arrives, and a
+  // slow continuous drift across the illustration (a "Ken Burns" move). The
+  // drift is what makes a still picture feel alive without the cost, wait and
+  // file size of real video.
+  const entrance = useRef(new Animated.Value(0)).current;
+  const drift = useRef(new Animated.Value(0)).current;
+
   const languageMeta = LANGUAGES.find((l) => l.code === language)!;
   const isRTL = languageMeta.rtl;
   const isArabic = language === 'ar-EG' || language === 'ar-MSA';
   const page = story.pages[pageIndex];
+  const illustration = illustrationFor(story.id, pageIndex);
   const isLastPage = pageIndex === story.pages.length - 1;
   const isFirstPage = pageIndex === 0;
 
@@ -36,6 +59,71 @@ export default function StoryScreen({ route, navigation }: Props) {
       headerTintColor: theme.text,
     });
   }, [language, story, navigation, theme]);
+
+  useEffect(() => {
+    entrance.setValue(0);
+    drift.setValue(0);
+
+    const fadeIn = Animated.timing(entrance, {
+      toValue: 1,
+      duration: 480,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver,
+    });
+
+    // Slow enough that it reads as calm rather than as movement a child would
+    // watch instead of reading. Runs out and back so it never jumps.
+    const pan = Animated.loop(
+      Animated.sequence([
+        Animated.timing(drift, {
+          toValue: 1,
+          duration: 16000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver,
+        }),
+        Animated.timing(drift, {
+          toValue: 0,
+          duration: 16000,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver,
+        }),
+      ])
+    );
+
+    fadeIn.start();
+    pan.start();
+    return () => {
+      fadeIn.stop();
+      pan.stop();
+    };
+  }, [pageIndex, language, entrance, drift]);
+
+  // Alternating direction per page stops the drift looking mechanical when a
+  // parent turns several pages in a row.
+  const driftsLeft = pageIndex % 2 === 0;
+  const imageStyle = {
+    transform: [
+      { scale: drift.interpolate({ inputRange: [0, 1], outputRange: [1.06, 1.14] }) },
+      {
+        translateX: drift.interpolate({
+          inputRange: [0, 1],
+          outputRange: driftsLeft ? [14, -14] : [-14, 14],
+        }),
+      },
+      {
+        translateY: drift.interpolate({
+          inputRange: [0, 1],
+          outputRange: driftsLeft ? [8, -8] : [-8, 8],
+        }),
+      },
+    ],
+  };
+  const entranceStyle = {
+    opacity: entrance,
+    transform: [
+      { translateY: entrance.interpolate({ inputRange: [0, 1], outputRange: [14, 0] }) },
+    ],
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.bg }]}>
@@ -68,17 +156,32 @@ export default function StoryScreen({ route, navigation }: Props) {
       </ScrollView>
 
       <ScrollView contentContainerStyle={styles.pageScroll}>
-        <View
+        <Animated.View
           style={[
             styles.pageCard,
             {
               backgroundColor: night ? theme.card : story.tint,
               borderColor: night ? theme.cardBorder : story.color,
             },
+            entranceStyle,
           ]}
         >
-          {page.imageUri ? (
-            <Image source={{ uri: page.imageUri }} style={styles.illustration} resizeMode="cover" />
+          {illustration ? (
+            <View style={styles.illustrationFrame}>
+              <Animated.Image
+                source={illustration}
+                style={[styles.illustration, imageStyle]}
+                resizeMode="cover"
+              />
+            </View>
+          ) : page.imageUri ? (
+            <View style={styles.illustrationFrame}>
+              <Animated.Image
+                source={{ uri: page.imageUri }}
+                style={[styles.illustration, imageStyle]}
+                resizeMode="cover"
+              />
+            </View>
           ) : (
             <Text style={styles.pageEmoji}>{story.emoji}</Text>
           )}
@@ -97,7 +200,7 @@ export default function StoryScreen({ route, navigation }: Props) {
               </Text>
             </View>
           )}
-        </View>
+        </Animated.View>
 
         <Text style={[styles.pageCounter, { color: theme.textMuted }]}>
           Page {pageIndex + 1} of {story.pages.length}
@@ -205,8 +308,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
   },
-  pageCard: { width: '100%', borderRadius: 28, borderWidth: 2, padding: 24, alignItems: 'center' },
-  illustration: { width: '100%', aspectRatio: 4 / 3, borderRadius: 18, marginBottom: 18 },
+  // Capped so the page keeps book-like proportions on a tablet or a wide
+  // browser window; without it the illustration grows until the text is pushed
+  // off screen.
+  pageCard: {
+    width: '100%',
+    maxWidth: 520,
+    borderRadius: 28,
+    borderWidth: 2,
+    padding: 24,
+    alignItems: 'center',
+  },
+  illustrationFrame: {
+    width: '100%',
+    aspectRatio: 4 / 3,
+    borderRadius: 18,
+    overflow: 'hidden',
+    marginBottom: 18,
+  },
+  illustration: { width: '100%', height: '100%' },
   pageEmoji: { fontSize: 52, marginBottom: 18 },
   pageText: { fontSize: 21, lineHeight: 34, textAlign: 'left', fontWeight: '500' },
   rtlText: { writingDirection: 'rtl', textAlign: 'right' },
