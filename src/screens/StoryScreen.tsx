@@ -23,6 +23,17 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Story'>;
 // driven from JS. On device the native driver keeps the drift off the JS thread.
 const useNativeDriver = Platform.OS !== 'web';
 
+// Drift tuning. One full sweep takes DRIFT_MS, so the image travels
+// 2 * DRIFT_X horizontally in that time — currently about 8px per second,
+// which is slow enough to stay calm but fast enough to actually be seen.
+// The minimum scale must leave enough overflow to cover the translation:
+// at scale s a frame of width w hides w * (s - 1) / 2 on each side.
+const DRIFT_MS = 7000;
+const DRIFT_SCALE_MIN = 1.14;
+const DRIFT_SCALE_MAX = 1.3;
+const DRIFT_X = 30;
+const DRIFT_Y = 18;
+
 export default function StoryScreen({ route, navigation }: Props) {
   const { theme, night } = useMode();
   const story = useMemo(
@@ -36,10 +47,12 @@ export default function StoryScreen({ route, navigation }: Props) {
   const [pageIndex, setPageIndex] = useState(0);
   const [showEnglish, setShowEnglish] = useState(false);
 
-  // Two animations run on every page: a fade/rise as the page arrives, and a
-  // slow continuous drift across the illustration (a "Ken Burns" move). The
-  // drift is what makes a still picture feel alive without the cost, wait and
-  // file size of real video.
+  // Two animations run on every page: the page slides and fades in as it
+  // arrives, and the illustration drifts continuously (a "Ken Burns" move).
+  // The drift is what makes a still picture feel alive without the cost, wait
+  // and file size of real video — but only if you can actually see it. An
+  // earlier pass drifted 14px over 16 seconds, which works out at about one
+  // pixel per second and reads as a completely static image.
   const entrance = useRef(new Animated.Value(0)).current;
   const drift = useRef(new Animated.Value(0)).current;
 
@@ -66,7 +79,7 @@ export default function StoryScreen({ route, navigation }: Props) {
 
     const fadeIn = Animated.timing(entrance, {
       toValue: 1,
-      duration: 480,
+      duration: 520,
       easing: Easing.out(Easing.cubic),
       useNativeDriver,
     });
@@ -77,13 +90,13 @@ export default function StoryScreen({ route, navigation }: Props) {
       Animated.sequence([
         Animated.timing(drift, {
           toValue: 1,
-          duration: 16000,
+          duration: DRIFT_MS,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver,
         }),
         Animated.timing(drift, {
           toValue: 0,
-          duration: 16000,
+          duration: DRIFT_MS,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver,
         }),
@@ -103,25 +116,39 @@ export default function StoryScreen({ route, navigation }: Props) {
   const driftsLeft = pageIndex % 2 === 0;
   const imageStyle = {
     transform: [
-      { scale: drift.interpolate({ inputRange: [0, 1], outputRange: [1.06, 1.14] }) },
+      {
+        scale: drift.interpolate({
+          inputRange: [0, 1],
+          outputRange: [DRIFT_SCALE_MIN, DRIFT_SCALE_MAX],
+        }),
+      },
       {
         translateX: drift.interpolate({
           inputRange: [0, 1],
-          outputRange: driftsLeft ? [14, -14] : [-14, 14],
+          outputRange: driftsLeft ? [DRIFT_X, -DRIFT_X] : [-DRIFT_X, DRIFT_X],
         }),
       },
       {
         translateY: drift.interpolate({
           inputRange: [0, 1],
-          outputRange: driftsLeft ? [8, -8] : [-8, 8],
+          outputRange: driftsLeft ? [DRIFT_Y, -DRIFT_Y] : [-DRIFT_Y, DRIFT_Y],
         }),
       },
     ],
   };
+
+  // Pages slide in from the side they were turned from, so a page turn reads
+  // as a page turn rather than as the text simply changing.
   const entranceStyle = {
     opacity: entrance,
     transform: [
-      { translateY: entrance.interpolate({ inputRange: [0, 1], outputRange: [14, 0] }) },
+      {
+        translateX: entrance.interpolate({
+          inputRange: [0, 1],
+          outputRange: [isRTL ? -44 : 44, 0],
+        }),
+      },
+      { scale: entrance.interpolate({ inputRange: [0, 1], outputRange: [0.96, 1] }) },
     ],
   };
 
