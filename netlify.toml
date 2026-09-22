@@ -1,0 +1,13 @@
+# Netlify config for the exported web build.
+#
+# The app is a single-page app: React Navigation changes the URL as you move
+# between the story list and a story, so any path other than "/" must still be
+# served index.html. Without this, opening or refreshing on /Story returns
+# Netlify's 404 page instead of the app.
+[build]
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
