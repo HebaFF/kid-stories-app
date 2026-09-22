@@ -39,3 +39,8 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Impeccable working files. DESIGN.md and .impeccable/design.json are the
+# durable record; decision-page transcripts and review screenshots are not.
+.impeccable/questions/
+.impeccable/review/

@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-23T00:00:00Z",
+  "title": "Design System: حكايات مصرية / Egyptian Stories",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "primary",
+        "displayName": "Press Vermilion",
+        "canonical": "#C8321E",
+        "tonalRamp": ["#2B0A05", "#521410", "#7A1D16", "#A82715", "#C8321E", "#DD5B45", "#EC9282", "#F8D2C9"]
+      },
+      "ground-deep": {
+        "role": "primary",
+        "displayName": "Deep Press Run",
+        "canonical": "#A82715",
+        "tonalRamp": ["#240903", "#45120A", "#671A10", "#8A2013", "#A82715", "#C9503A", "#E08E7C", "#F4CDC4"]
+      },
+      "night-ground": {
+        "role": "primary",
+        "displayName": "Midnight Vermilion",
+        "canonical": "#52150F",
+        "tonalRamp": ["#1A0604", "#2C0B07", "#3E100A", "#52150F", "#6E2016", "#8F3527", "#B76A59", "#DFAB9C"]
+      },
+      "cobalt": {
+        "role": "secondary",
+        "displayName": "Press Cobalt",
+        "canonical": "#1B4D9B",
+        "tonalRamp": ["#071129", "#0C1F47", "#123165", "#174083", "#1B4D9B", "#3B72C4", "#7AA1DC", "#C2D4F0"]
+      },
+      "chrome": {
+        "role": "secondary",
+        "displayName": "Chrome Yellow",
+        "canonical": "#F2B01E",
+        "tonalRamp": ["#3A2803", "#5C3F06", "#80580B", "#A97512", "#D19318", "#F2B01E", "#F8CC6C", "#FCE7B6"]
+      },
+      "grass": {
+        "role": "secondary",
+        "displayName": "Field Grass",
+        "canonical": "#2F7D52",
+        "tonalRamp": ["#0A1F14", "#123422", "#1B4A31", "#256440", "#2F7D52", "#4CA273", "#84C6A0", "#C3E4D2"]
+      },
+      "plate": {
+        "role": "neutral",
+        "displayName": "Newsprint Cream",
+        "canonical": "#F5ECD8",
+        "tonalRamp": ["#2B2519", "#463D2A", "#63573C", "#837451", "#A69670", "#CBBD9B", "#EADFC6", "#F5ECD8"]
+      },
+      "night-plate": {
+        "role": "neutral",
+        "displayName": "Kraft Board",
+        "canonical": "#463527",
+        "tonalRamp": ["#140F0A", "#241B13", "#3B2C20", "#463527", "#5E4735", "#7C6048", "#A98A6C", "#D3BCA0"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Line Black",
+        "canonical": "#17120F",
+        "tonalRamp": ["#0A0806", "#17120F", "#241B15", "#3B2D24", "#564236", "#6E5A48", "#9C876F", "#CBB694"]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Ink",
+        "canonical": "#6E5A48",
+        "tonalRamp": ["#17120F", "#241B15", "#3B2D24", "#564236", "#6E5A48", "#937C64", "#B9A288", "#DCCBB2"]
+      },
+      "on-ground": {
+        "role": "neutral",
+        "displayName": "On-Ground Cream",
+        "canonical": "#FBF3E2",
+        "tonalRamp": ["#2E2719", "#4B412B", "#6A5C3E", "#8B7A55", "#AE9B72", "#D0C09A", "#EDE2C6", "#FBF3E2"]
+      }
+    },
+    "typographyMeta": {
+      "masthead": { "displayName": "Masthead", "purpose": "The magazine title on the contents page, struck twice off-register. Never reused for content." },
+      "numeral": { "displayName": "Folio Numeral", "purpose": "The reader's page number, in Arabic-Indic digits." },
+      "lead-title-ar": { "displayName": "Lead Title (Arabic)", "purpose": "The full-width lead plate title." },
+      "plate-title-ar": { "displayName": "Plate Title (Arabic)", "purpose": "Grid plate titles and knocked-out press blocks." },
+      "story-ar": { "displayName": "Story Body (Arabic)", "purpose": "Long reading text in Noto Naskh, 44px leading on 23px." },
+      "story-en": { "displayName": "Story Body (Latin)", "purpose": "The English track and the second-pass crib." },
+      "stamp": { "displayName": "Stamp", "purpose": "All apparatus labels: letter-spaced Archivo caps, always uppercased." }
+    },
+    "shadows": [
+      {
+        "name": "laid-plate",
+        "value": "3px 5px 10px rgba(18, 7, 4, 0.42)",
+        "purpose": "The only shadow in the system. A sheet of stock sitting on the press bed. Never applied to stamps, rules, icons or bands."
+      }
+    ],
+    "motion": [
+      { "name": "plate-lay-down", "value": "520ms cubic-bezier(0.215, 0.61, 0.355, 1)", "purpose": "The authored moment: a fresh plate settling from 26px off-spine, 14px down and 1.4deg off-square into position. Mirrors with text direction." },
+      { "name": "art-drift", "value": "7000ms cubic-bezier(0.42, 0, 0.58, 1), 3 iterations", "purpose": "Slow scale-and-pan (1.14 to 1.3, ±30px x, ±18px y) on illustrations only. Bounded at 3 iterations so the page comes to rest." },
+      { "name": "plate-press", "value": "opacity 0.86", "purpose": "Pressed feedback on a tappable plate." }
+    ],
+    "breakpoints": [
+      { "name": "column", "value": "560px" },
+      { "name": "spread", "value": "900px" },
+      { "name": "column-spread", "value": "1040px" }
+    ],
+    "keylines": [
+      { "name": "hair", "value": "1px", "purpose": "Stamps, filter stamps, pips, internal dividers." },
+      { "name": "keyline", "value": "2px", "purpose": "Printed rules, press block frames, turn buttons." },
+      { "name": "heavy", "value": "3.5px", "purpose": "Plate borders, masthead rule, the line under an illustration block." }
+    ],
+    "target": { "name": "minimum-interactive-height", "value": "46px", "purpose": "The audience starts at two years old. Square cut grows a minHeight rather than softening into a pill." }
+  },
+  "components": [
+    {
+      "name": "Plate",
+      "kind": "card",
+      "refersTo": "plate",
+      "description": "A sheet of stock laid on the press ground: halftone, heavy keyline, and the system's only shadow.",
+      "html": "<article class=\"ds-plate\"><div class=\"ds-plate-block\"></div><div class=\"ds-plate-body\"><h3 class=\"ds-plate-title\">النجمة اللي على النيل</h3><p class=\"ds-plate-title-en\">The Star on the Nile</p><div class=\"ds-plate-stamps\"><span class=\"ds-stamp\">5-7</span><span class=\"ds-stamp ds-stamp-filled\">6 MIN</span></div><p class=\"ds-plate-origin\">CAIRO</p></div></article>",
+      "css": ".ds-plate { position: relative; background: #F5ECD8; border: 3.5px solid #17120F; border-radius: 0; overflow: hidden; box-shadow: 3px 5px 10px rgba(18,7,4,0.42); width: 280px; direction: rtl; background-image: radial-gradient(#17120F 1.15px, transparent 1.15px); background-size: 6px 6px; } .ds-plate-block { aspect-ratio: 4 / 3; background: #1B4D9B; border-bottom: 3.5px solid #17120F; } .ds-plate-body { padding: 10px; } .ds-plate-title { font-family: Lalezar, sans-serif; font-size: 30px; line-height: 42px; color: #17120F; margin: 0; text-align: right; } .ds-plate-title-en { font-family: Lalezar, sans-serif; font-size: 21px; line-height: 27px; color: #241B15; margin: 2px 0 0; text-align: right; } .ds-plate-stamps { display: flex; gap: 6px; margin-top: 6px; } .ds-plate-origin { font-family: Archivo, sans-serif; font-size: 10.5px; letter-spacing: 1.1px; font-weight: 600; color: #6E5A48; margin: 6px 0 0; text-align: right; }"
+    },
+    {
+      "name": "Stamp",
+      "kind": "chip",
+      "refersTo": "stamp",
+      "description": "The apparatus of a printed issue: age band, running time, provenance. Square keyline, letter-spaced caps.",
+      "html": "<span class=\"ds-stamp\">5-7</span> <span class=\"ds-stamp ds-stamp-filled\">6 MIN</span>",
+      "css": ".ds-stamp { display: inline-block; font-family: Archivo, sans-serif; font-size: 10.5px; letter-spacing: 1.1px; font-weight: 600; text-transform: uppercase; color: #17120F; background: transparent; border: 1px solid #17120F; border-radius: 0; padding: 2px 6px; } .ds-stamp-filled { background: #17120F; color: #F5ECD8; }"
+    },
+    {
+      "name": "Filter Stamp",
+      "kind": "chip",
+      "refersTo": "filter-stamp",
+      "description": "The stamp language grown to a 46px touch target, printed straight onto the press ground. Selected state flips the fill.",
+      "html": "<div class=\"ds-filterbar\"><button class=\"ds-filter-stamp ds-filter-stamp-active\">كل الأعمار</button><button class=\"ds-filter-stamp\">٥-٧</button><button class=\"ds-filter-stamp\">٨-١٠</button></div>",
+      "css": ".ds-filterbar { display: flex; gap: 6px; background: #C8321E; padding: 12px; direction: rtl; } .ds-filter-stamp { font-family: NotoNaskhArabic, serif; font-size: 12px; color: #FBF3E2; background: transparent; border: 1px solid #FBF3E2; border-radius: 0; padding: 0 16px; min-height: 46px; min-width: 46px; cursor: pointer; } .ds-filter-stamp:hover { background: rgba(251,243,226,0.14); } .ds-filter-stamp:focus-visible { outline: 2px solid #F2B01E; outline-offset: 2px; } .ds-filter-stamp-active { background: #FBF3E2; color: #C8321E; }"
+    },
+    {
+      "name": "Turn Button",
+      "kind": "button",
+      "refersTo": "turn-button",
+      "description": "The reader's page-turn control. Square, 2px keyline, chevron facing computed from render-time layout direction.",
+      "html": "<button class=\"ds-turn\" aria-label=\"Next page\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M15 4 L7 12 L15 20\" stroke=\"#FBF3E2\" stroke-width=\"2.4\" fill=\"none\"/></svg></button><button class=\"ds-turn\" disabled aria-label=\"Previous page\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M9 4 L17 12 L9 20\" stroke=\"#FBF3E2\" stroke-width=\"2.4\" fill=\"none\"/></svg></button>",
+      "css": ".ds-turn { background: transparent; border: 2px solid #FBF3E2; border-radius: 0; padding: 0 24px; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 8px; } .ds-turn:hover { background: rgba(168,39,21,0.5); } .ds-turn:active { background: #A82715; } .ds-turn:focus-visible { outline: 2px solid #F2B01E; outline-offset: 2px; } .ds-turn[disabled] { opacity: 0.32; cursor: default; }"
+    },
+    {
+      "name": "Masthead",
+      "kind": "nav",
+      "refersTo": "masthead",
+      "description": "The contents page band: deeper ground run, halftone, title struck twice off-register, heavy rule, and a two-edge caps foot.",
+      "html": "<header class=\"ds-masthead\"><div class=\"ds-masthead-title\"><span class=\"ds-masthead-offset\" aria-hidden=\"true\">حكايات مصرية</span><span class=\"ds-masthead-black\">حكايات مصرية</span></div><div class=\"ds-masthead-rule\"></div><div class=\"ds-masthead-foot\"><span>EGYPTIAN STORIES</span><span>١٠ حكاية</span></div></header>",
+      "css": ".ds-masthead { position: relative; background: #A82715; padding: 10px 16px; direction: rtl; overflow: hidden; background-image: radial-gradient(#17120F 1.15px, transparent 1.15px); background-size: 5px 5px; } .ds-masthead-title { position: relative; font-family: Lalezar, sans-serif; font-size: 52px; line-height: 58px; } .ds-masthead-offset { position: absolute; inset: 0; color: #F2B01E; transform: translate(2px, 2px); } .ds-masthead-black { position: relative; color: #FBF3E2; } .ds-masthead-rule { height: 3.5px; background: #FBF3E2; margin-top: 6px; } .ds-masthead-foot { display: flex; justify-content: space-between; margin-top: 6px; font-family: Archivo, sans-serif; font-size: 10.5px; letter-spacing: 1.1px; font-weight: 700; color: #FBF3E2; }"
+    },
+    {
+      "name": "Press Block",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The block a magazine prints when the engraver has not delivered a picture. Nine of ten stories render this, so it is the most-seen surface in the app.",
+      "html": "<div class=\"ds-pressblock\"><div class=\"ds-pressblock-frame\"><span class=\"ds-pressblock-title\">جحا والحمار</span></div><svg class=\"ds-pressblock-lozenge\" width=\"20\" height=\"20\" viewBox=\"0 0 48 48\" fill=\"none\"><path d=\"M24 3 L45 24 L24 45 L3 24 Z\" stroke=\"#F5ECD8\" stroke-width=\"2.6\" fill=\"none\"/><circle cx=\"24\" cy=\"24\" r=\"3.4\" fill=\"#F5ECD8\"/></svg></div>",
+      "css": ".ds-pressblock { position: relative; background: #17120F; aspect-ratio: 4 / 3; width: 260px; display: flex; align-items: center; justify-content: center; background-image: radial-gradient(rgba(245,236,216,0.2) 1.15px, transparent 1.15px); background-size: 4px 4px; } .ds-pressblock-frame { margin: 16px; border: 2px solid #F5ECD8; padding: 16px 10px; width: 100%; } .ds-pressblock-title { display: block; font-family: Lalezar, sans-serif; font-size: 30px; line-height: 42px; color: #F5ECD8; text-align: center; direction: rtl; } .ds-pressblock-lozenge { position: absolute; top: 6px; right: 6px; }"
+    },
+    {
+      "name": "Page Pips",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "The reader's page indicator: square 9px pips, hairline keyline, solid fill on the current page.",
+      "html": "<div class=\"ds-pips\"><span class=\"ds-pip\"></span><span class=\"ds-pip ds-pip-on\"></span><span class=\"ds-pip\"></span><span class=\"ds-pip\"></span></div>",
+      "css": ".ds-pips { display: flex; gap: 6px; background: #C8321E; padding: 10px; } .ds-pip { width: 9px; height: 9px; border: 1px solid #FBF3E2; border-radius: 0; } .ds-pip-on { background: #FBF3E2; }"
+    },
+    {
+      "name": "Second Pass Toggle",
+      "kind": "button",
+      "refersTo": null,
+      "description": "Lays the English impression under the Arabic one. Authored two-sheets icon, never a globe or a flag.",
+      "html": "<button class=\"ds-secondpass\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\"><rect x=\"3.2\" y=\"6.4\" width=\"13\" height=\"14\" stroke=\"currentColor\" stroke-width=\"2.4\" fill=\"none\"/><path d=\"M7.8 3.4 H20.8 V17.2\" stroke=\"currentColor\" stroke-width=\"2.4\" fill=\"none\"/><line x1=\"6.6\" y1=\"11.4\" x2=\"12.8\" y2=\"11.4\" stroke=\"currentColor\" stroke-width=\"2.4\"/><line x1=\"6.6\" y1=\"15.2\" x2=\"12.8\" y2=\"15.2\" stroke=\"currentColor\" stroke-width=\"2.4\"/></svg><span>ENGLISH</span></button>",
+      "css": ".ds-secondpass { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: #FBF3E2; border: 1px solid #FBF3E2; border-radius: 0; padding: 0 16px; min-height: 46px; font-family: Archivo, sans-serif; font-size: 10.5px; letter-spacing: 1.1px; font-weight: 700; cursor: pointer; } .ds-secondpass:hover { background: rgba(251,243,226,0.14); } .ds-secondpass:focus-visible { outline: 2px solid #F2B01E; outline-offset: 2px; } .ds-secondpass[aria-pressed=\"true\"] { background: #FBF3E2; color: #C8321E; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Newsstand Press",
+    "overview": "This is a Cairo children's magazine of the 1960s-80s — Samir, Mickey — printed in a handful of spot inks on cheap paper, with visible halftone and sloppy registration. The screen is the press bed, not a page: the ink owns the ground, and paper only ever appears as plates laid on top of it, edged in a heavy keyline and carrying a real cast shadow. Two worlds are refused by name: the rounded-card kids' app with its pills and bubbles, and its opposite, the cream-and-pastel bedtime minimal.\n\nDensity is editorial rather than airy. Material separates with printed ink — rules, keylines, halftone, letter-spaced caps — before it separates with whitespace. Every surface sits under a faint dot screen (~10% opacity, 4-7px pitch) that is findable when you look for it and invisible while reading. Display type is struck twice, a coloured impression laid down first and the black struck over it two pixels off-register, which is the one detail that makes cheap colour printing unmistakable.\n\nTwo registers exist, and night is not day dimmed. The press changes inks: the ground goes from press vermilion to oxblood, paper plates become kraft board, and paper white never appears after dark. Arabic leads throughout — the whole surface hangs from the right spine regardless of which language track the reader selects.",
+    "keyCharacteristics": [
+      "Committed colour: press ink owns roughly a third of every screen; paper is a laid object, never the field.",
+      "Halftone under everything printed.",
+      "Square cuts only — zero radius anywhere in the build.",
+      "Misregistration by 2px on display type, as a device, not an accident.",
+      "Two ink registers (day / night), not one palette at two brightnesses.",
+      "RTL as structure, Arabic-Indic numerals as default."
+    ],
+    "rules": [
+      { "name": "The Committed Ground Rule", "body": "The press ink owns the screen. Paper never becomes the background; it appears only as a plate laid on the ink, edged in a heavy keyline. A cream page with coloured trim is the default this world exists to refuse.", "section": "colors" },
+      { "name": "The Changed Ink Rule", "body": "Night is a different press run, not a dimmer. The ground moves to oxblood, plates move to kraft board, and paper white never appears at night — a sheet of white paper in a dark bedroom is a defect.", "section": "colors" },
+      { "name": "The Overprint Rule", "body": "Artwork rendered at night is overprinted with the press ground at 0.34 opacity, so a daylight image is never the brightest object on a bedtime screen.", "section": "colors" },
+      { "name": "The One Voice Rule", "body": "Lalezar is the only display face, day and night, Arabic and Latin. Reading text never uses it, and no second display face is ever introduced.", "section": "typography" },
+      { "name": "The Second Impression Rule", "body": "Display titles print in two passes: a coloured ink laid down first, the black struck over it by misregister (2px; 2.5px on the lead plate). The offset pass is hidden from assistive technology — only the black pass carries the string.", "section": "typography" },
+      { "name": "The Arabic Numeral Rule", "body": "Counts, ages and page numbers set in Arabic-Indic digits (٠١٢٣…). Latin digits are the tell of a layout built for English and translated afterwards.", "section": "typography" },
+      { "name": "The Right Spine Rule", "body": "The page is laid out right-to-left always, regardless of the selected language track — Arabic leads, so the whole surface hangs from the right spine, not just the Arabic text nodes. Direction must be read at render time (isRTL()), never captured at module load, and on web the document's dir must be consulted because react-native-web's I18nManager.isRTL lies.", "section": "layout" },
+      { "name": "The Minimum Target Rule", "body": "Every interactive element carries a minimum height of 46px (TARGET). The audience starts at two years old; the square cut keeps its shape and grows a minHeight rather than softening into a larger pill.", "section": "layout" },
+      { "name": "The One Lift Rule", "body": "Only plates cast shadows. Stamps, rules, icons, filters and the masthead are flat against the ground; giving any of them elevation turns the press bed into a UI surface.", "section": "elevation" },
+      { "name": "The Halftone Rule", "body": "Every printed surface sits under the dot screen — the ground at 7px pitch, the masthead at 5px, plates at the theme default (6px), press blocks opened up to 4-5px at 0.2 opacity. The dot is drawn as a real SVG pattern, never a bitmap tile.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do let the press ink own the ground and put paper on it as a plate with a 3.5px keyline.",
+      "Do keep every corner square (0px radius) and let keyline weight carry the hierarchy (1 / 2 / 3.5px).",
+      "Do put the halftone screen under every printed surface.",
+      "Do strike display titles twice, the coloured impression 2px off-register under the black, and hide the offset pass from assistive tech.",
+      "Do set counts, ages and page numbers in Arabic-Indic digits.",
+      "Do lay out right-to-left always, and read direction at render time via isRTL().",
+      "Do give every interactive element a 46px minimum height without softening its shape.",
+      "Do change inks for night — oxblood ground, kraft board plates — and overprint artwork at 0.34.",
+      "Do draw new icons in the family: 2.4 stroke, butt caps, mitre joins, authored paths."
+    ],
+    "donts": [
+      "Don't make paper the background or the ground a trim colour.",
+      "Don't use rounded corners, pills, or capsule chips anywhere.",
+      "Don't print vermilion as a plate ink — it owns the ground and would disappear on it.",
+      "Don't use white, or any paper-value light, at night.",
+      "Don't add a second display face, or set reading text in Lalezar.",
+      "Don't add shadows to anything but plates; separate with ink, not with elevation.",
+      "Don't use emoji, icon fonts, or imported icon-set glyphs.",
+      "Don't let motion run unbounded — the drift stops after 3 iterations and the plate comes to rest.",
+      "Don't let the reading column exceed its measure (560px, 1040px on a spread) by growing plates to fill a desktop window."
+    ]
+  }
+}

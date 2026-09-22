@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Animated,
   Easing,
-  Image,
   Platform,
   Pressable,
   ScrollView,
@@ -10,13 +9,20 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { STORIES } from '../data/stories';
-import { LANGUAGES, LanguageCode } from '../types';
-import { useVideoPlayer, VideoView } from 'expo-video';
 import { animationFor } from '../data/animations';
 import { illustrationFor } from '../data/illustrations';
+import { LANGUAGES, type LanguageCode } from '../types';
+import { RULE, SPACE, TARGET, TYPE, type Ink, type Theme } from '../theme';
+import { Halftone, Plate, PressBlock, Rule, Stamp } from '../design/Press';
+import { IconBack, IconChevron, IconSecondPass } from '../design/icons';
+import { isRTL as layoutIsRTL } from '../design/direction';
+import { plateInk } from '../design/storyInk';
 import { useMode } from '../ModeContext';
+import { toArabicDigits } from './HomeScreen';
 import type { RootStackParamList } from '../../App';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Story'>;
@@ -25,11 +31,10 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Story'>;
 // driven from JS. On device the native driver keeps the drift off the JS thread.
 const useNativeDriver = Platform.OS !== 'web';
 
-// Drift tuning. One full sweep takes DRIFT_MS, so the image travels
-// 2 * DRIFT_X horizontally in that time — currently about 8px per second,
-// which is slow enough to stay calm but fast enough to actually be seen.
-// The minimum scale must leave enough overflow to cover the translation:
-// at scale s a frame of width w hides w * (s - 1) / 2 on each side.
+// Drift tuning. One sweep takes DRIFT_MS, so the block travels 2 × DRIFT_X
+// across it — roughly 8px a second, slow enough to stay calm and fast enough
+// to be seen. The minimum scale must cover the translation: at scale s a frame
+// of width w hides w × (s − 1) / 2 on each side.
 const DRIFT_MS = 7000;
 const DRIFT_SCALE_MIN = 1.14;
 const DRIFT_SCALE_MAX = 1.3;
@@ -38,67 +43,62 @@ const DRIFT_Y = 18;
 
 export default function StoryScreen({ route, navigation }: Props) {
   const { theme, night } = useMode();
+  const insets = useSafeAreaInsets();
   const story = useMemo(
     () => STORIES.find((s) => s.id === route.params.storyId)!,
     [route.params.storyId]
   );
+  const storyIndex = useMemo(() => STORIES.findIndex((s) => s.id === story.id), [story.id]);
+  const inkKey = plateInk(story.id, storyIndex);
+  const ink = inkKey === 'ink' ? theme.ink : theme[inkKey as Ink];
 
-  // Egyptian colloquial is the default track: it is the way the story would be
-  // told out loud at home.
+  // Egyptian colloquial leads: it is the way the story is told at home.
   const [language, setLanguage] = useState<LanguageCode>('ar-EG');
   const [pageIndex, setPageIndex] = useState(0);
-  const [showEnglish, setShowEnglish] = useState(false);
+  const [secondPass, setSecondPass] = useState(false);
 
-  // Two animations run on every page: the page slides and fades in as it
-  // arrives, and the illustration drifts continuously (a "Ken Burns" move).
-  // The drift is what makes a still picture feel alive without the cost, wait
-  // and file size of real video — but only if you can actually see it. An
-  // earlier pass drifted 14px over 16 seconds, which works out at about one
-  // pixel per second and reads as a completely static image.
-  const entrance = useRef(new Animated.Value(0)).current;
-  const drift = useRef(new Animated.Value(0)).current;
-
-  const languageMeta = LANGUAGES.find((l) => l.code === language)!;
-  const isRTL = languageMeta.rtl;
-  const isArabic = language === 'ar-EG' || language === 'ar-MSA';
   const page = story.pages[pageIndex];
   const illustration = illustrationFor(story.id, pageIndex);
   const animation = animationFor(story.id, pageIndex);
+  const languageMeta = LANGUAGES.find((l) => l.code === language)!;
+  // The selected track's own direction, which is not the page's layout
+  // direction: the page is always right-to-left because Arabic leads.
+  const isRTL = languageMeta.rtl;
+  const isArabic = language === 'ar-EG' || language === 'ar-MSA';
+  const isFirstPage = pageIndex === 0;
+  const isLastPage = pageIndex === story.pages.length - 1;
 
-  // The hook has to run on every render, so a page with no clip passes null
-  // and simply renders nothing. Clips are silent and looped: five seconds is
-  // shorter than a page takes to read, and a soundtrack would fight the
-  // narration once that exists.
+  const entrance = useRef(new Animated.Value(0)).current;
+  const drift = useRef(new Animated.Value(0)).current;
+
   const player = useVideoPlayer(animation ?? null, (instance) => {
     instance.loop = true;
     instance.muted = true;
     instance.play();
   });
-  const isLastPage = pageIndex === story.pages.length - 1;
-  const isFirstPage = pageIndex === 0;
 
+  // play() inside the setup callback can run before the source is ready, which
+  // leaves the clip paused on its first frame. Asking again once the page's
+  // clip resolves is what actually starts it.
   useEffect(() => {
-    navigation.setOptions({
-      title: story.title[language],
-      headerStyle: { backgroundColor: theme.headerBg },
-      headerTitleStyle: { color: theme.text, fontWeight: '800' },
-      headerTintColor: theme.text,
-    });
-  }, [language, story, navigation, theme]);
+    if (!animation) return;
+    player.loop = true;
+    player.muted = true;
+    player.play();
+  }, [animation, player, pageIndex]);
 
   useEffect(() => {
     entrance.setValue(0);
     drift.setValue(0);
 
-    const fadeIn = Animated.timing(entrance, {
+    const lay = Animated.timing(entrance, {
       toValue: 1,
       duration: 520,
       easing: Easing.out(Easing.cubic),
       useNativeDriver,
     });
-
-    // Slow enough that it reads as calm rather than as movement a child would
-    // watch instead of reading. Runs out and back so it never jumps.
+    // Bounded, not perpetual: the lay-down is the authored moment, and a
+    // permanent Ken Burns underneath it never lets the page come to rest.
     const pan = Animated.loop(
       Animated.sequence([
         Animated.timing(drift, {
@@ -113,32 +113,20 @@ export default function StoryScreen({ route, navigation }: Props) {
           easing: Easing.inOut(Easing.ease),
           useNativeDriver,
         }),
-      ])
+      ]),
+      { iterations: 3 }
     );
 
-    fadeIn.start();
+    lay.start();
     pan.start();
     return () => {
-      fadeIn.stop();
+      lay.stop();
       pan.stop();
     };
   }, [pageIndex, language, entrance, drift]);
 
-  // The setup callback passed to useVideoPlayer runs when the player is built,
-  // which can be before the source is ready — the clip then sits paused on its
-  // first frame. Asking again once the page's clip is resolved is what actually
-  // starts it.
-  useEffect(() => {
-    if (!animation) return;
-    player.loop = true;
-    player.muted = true;
-    player.play();
-  }, [animation, player, pageIndex]);
-
-  // Alternating direction per page stops the drift looking mechanical when a
-  // parent turns several pages in a row.
   const driftsLeft = pageIndex % 2 === 0;
-  const imageStyle = {
+  const blockStyle = {
     transform: [
       {
         scale: drift.interpolate({
@@ -161,276 +149,345 @@ export default function StoryScreen({ route, navigation }: Props) {
     ],
   };
 
-  // Pages slide in from the side they were turned from, so a page turn reads
-  // as a page turn rather than as the text simply changing.
-  const entranceStyle = {
+  // The authored moment: a fresh plate laid onto the press, settling from
+  // off-register and off-square into position. One motion, on the one thing
+  // that actually changes.
+  const layStyle = {
     opacity: entrance,
     transform: [
       {
         translateX: entrance.interpolate({
           inputRange: [0, 1],
-          outputRange: [isRTL ? -44 : 44, 0],
+          outputRange: [isRTL ? -26 : 26, 0],
         }),
       },
-      { scale: entrance.interpolate({ inputRange: [0, 1], outputRange: [0.96, 1] }) },
+      { translateY: entrance.interpolate({ inputRange: [0, 1], outputRange: [14, 0] }) },
+      {
+        rotate: entrance.interpolate({
+          inputRange: [0, 1],
+          outputRange: [isRTL ? '-1.4deg' : '1.4deg', '0deg'],
+        }),
+      },
     ],
   };
 
+  const turn = useCallback((next: number) => {
+    setPageIndex(next);
+    setSecondPass(false);
+  }, []);
+
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.languageScroll}
-        contentContainerStyle={styles.languageRow}
-      >
-        {LANGUAGES.map((lang) => {
-          const active = language === lang.code;
-          return (
-            <Pressable
-              key={lang.code}
-              style={[
-                styles.langPill,
-                {
-                  backgroundColor: active ? lang.color : theme.pill,
-                  borderColor: active ? lang.color : theme.pillBorder,
-                },
-              ]}
-              onPress={() => setLanguage(lang.code)}
-            >
-              <Text style={[styles.langPillText, { color: active ? '#FFFFFF' : theme.textMuted }]}>
-                {lang.label}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </ScrollView>
+    <View style={[styles.container, { backgroundColor: theme.ground }]}>
+      <Halftone theme={theme} pitch={7} />
 
-      <ScrollView contentContainerStyle={styles.pageScroll}>
-        <Animated.View
-          style={[
-            styles.pageCard,
-            {
-              backgroundColor: night ? theme.card : story.tint,
-              borderColor: night ? theme.cardBorder : story.color,
-            },
-            entranceStyle,
-          ]}
+      <View style={[styles.bar, { paddingTop: insets.top + SPACE.snug }]}>
+        <Pressable
+          onPress={() => navigation.goBack()}
+          accessibilityRole="button"
+          accessibilityLabel="Back to the stories"
+          hitSlop={12}
+          style={styles.barButton}
         >
-          {animation ? (
-            <View style={styles.illustrationFrame}>
-              <VideoView
-                player={player}
-                style={styles.illustration}
-                contentFit="cover"
-                nativeControls={false}
-              />
-            </View>
-          ) : illustration ? (
-            <View style={styles.illustrationFrame}>
-              <Animated.Image
-                source={illustration}
-                style={[styles.illustration, imageStyle]}
-                resizeMode="cover"
-              />
-            </View>
-          ) : page.imageUri ? (
-            <View style={styles.illustrationFrame}>
-              <Animated.Image
-                source={{ uri: page.imageUri }}
-                style={[styles.illustration, imageStyle]}
-                resizeMode="cover"
-              />
-            </View>
-          ) : (
-            <Text style={styles.pageEmoji}>{story.emoji}</Text>
-          )}
-
-          <Text style={[styles.pageText, { color: theme.text }, isRTL && styles.rtlText]}>
-            {page.text[language]}
+          <IconBack size={22} color={theme.onGround} />
+        </Pressable>
+        <View style={styles.barTitle}>
+          <Text
+            numberOfLines={1}
+            style={[TYPE.mastheadLatin, styles.barTitleText, { color: theme.onGround }]}
+          >
+            {story.title['ar-EG']}
           </Text>
+        </View>
+        <View style={styles.barButton} />
+      </View>
+      <Rule theme={theme} weight={RULE.keyline} color={theme.onGroundMuted} />
 
-          {/* Bilingual reading: the English sits under the Arabic rather than
-              replacing it, so a child can look across from one to the other
-              without losing their place. */}
-          {isArabic && showEnglish && (
-            <View style={[styles.translationBlock, { borderTopColor: theme.cardBorder }]}>
-              <Text style={[styles.translationText, { color: theme.textMuted }]}>
-                {page.text.en}
-              </Text>
+      <ScrollView
+        contentContainerStyle={[styles.scroll, { paddingBottom: SPACE.band }]}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.column}>
+        <View style={styles.trackRow}>
+          {LANGUAGES.map((lang) => {
+            const active = language === lang.code;
+            return (
+              <Pressable
+                key={lang.code}
+                onPress={() => setLanguage(lang.code)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: active }}
+                style={[
+                  styles.track,
+                  {
+                    borderColor: theme.onGround,
+                    backgroundColor: active ? theme.onGround : 'transparent',
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    lang.rtl ? TYPE.stampAr : TYPE.stamp,
+                    { color: active ? theme.ground : theme.onGround },
+                  ]}
+                >
+                  {lang.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+
+        <Animated.View style={[styles.sheet, layStyle]}>
+          <Plate theme={theme} style={styles.page}>
+            <View
+              style={[
+                styles.block,
+                illustration || animation ? styles.blockArt : styles.blockSet,
+                { borderBottomColor: theme.ink },
+              ]}
+            >
+              {animation ? (
+                <VideoView
+                  player={player}
+                  style={styles.media}
+                  contentFit="cover"
+                  nativeControls={false}
+                />
+              ) : illustration ? (
+                <>
+                  <Animated.Image
+                    source={illustration}
+                    style={[styles.media, blockStyle]}
+                    resizeMode="cover"
+                  />
+                  {night ? (
+                    <View
+                      pointerEvents="none"
+                      style={[styles.nightPass, { backgroundColor: theme.ground }]}
+                    />
+                  ) : null}
+                </>
+              ) : (
+                <PressBlock theme={theme} ink={ink} title={story.title['ar-EG']} scale="lead" />
+              )}
             </View>
-          )}
+
+            <View style={styles.text}>
+              <Text
+                style={[
+                  isArabic ? TYPE.storyAr : TYPE.storyEn,
+                  { color: theme.inkBody },
+                  isRTL && styles.rtl,
+                ]}
+              >
+                {page.text[language]}
+              </Text>
+
+              {isArabic && secondPass ? (
+                <View style={[styles.secondPass, { borderTopColor: theme.inkMuted }]}>
+                  <Text style={[TYPE.storyEn, { color: theme.inkMuted }]}>{page.text.en}</Text>
+                </View>
+              ) : null}
+            </View>
+          </Plate>
         </Animated.View>
 
-        <Text style={[styles.pageCounter, { color: theme.textMuted }]}>
-          Page {pageIndex + 1} of {story.pages.length}
-        </Text>
+        <View style={styles.folio}>
+          <Text style={[TYPE.numeral, styles.folioNumber, { color: theme.onGround }]}>
+            {toArabicDigits(pageIndex + 1)}
+          </Text>
+          <View style={styles.folioMeta}>
+            <Stamp theme={theme} label={`of ${story.pages.length}`} color={theme.onGround} />
+            {isArabic ? (
+              <Pressable
+                onPress={() => setSecondPass((v) => !v)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: secondPass }}
+                style={[
+                  styles.secondPassButton,
+                  {
+                    borderColor: theme.onGround,
+                    backgroundColor: secondPass ? theme.onGround : 'transparent',
+                  },
+                ]}
+              >
+                <IconSecondPass size={15} color={secondPass ? theme.ground : theme.onGround} />
+                <Text
+                  style={[
+                    TYPE.stamp,
+                    styles.secondPassLabel,
+                    { color: secondPass ? theme.ground : theme.onGround },
+                  ]}
+                >
+                  ENGLISH
+                </Text>
+              </Pressable>
+            ) : null}
+          </View>
+        </View>
+        </View>
       </ScrollView>
 
-      {isArabic && (
-        <View style={styles.translateRow}>
-          <Pressable
-            onPress={() => setShowEnglish((value) => !value)}
-            style={[
-              styles.translateButton,
-              {
-                backgroundColor: showEnglish ? (night ? '#5B6ABF' : story.color) : theme.pill,
-                borderColor: showEnglish ? (night ? '#5B6ABF' : story.color) : theme.pillBorder,
-              },
-            ]}
-          >
-            <Text
-              style={[styles.translateText, { color: showEnglish ? '#FFFFFF' : theme.textMuted }]}
-            >
-              {showEnglish ? '🔤  Hide English' : '🔤  Show English'}
-            </Text>
-          </Pressable>
-        </View>
-      )}
-
-      <View style={styles.dots}>
-        {story.pages.map((_, i) => (
-          <View
-            key={i}
-            style={[
-              styles.dot,
-              { backgroundColor: theme.cardBorder },
-              i === pageIndex && [
-                styles.dotActive,
-                { backgroundColor: night ? '#8B7FE8' : story.color },
-              ],
-            ]}
-          />
-        ))}
-      </View>
-
-      <View style={styles.controls}>
-        <Pressable
-          style={[
-            styles.navButton,
-            { backgroundColor: theme.pill, borderColor: theme.pillBorder },
-            isFirstPage && styles.navButtonDisabled,
-          ]}
+      <View
+        style={[
+          styles.turnBarOuter,
+          { borderTopColor: theme.onGroundMuted, paddingBottom: insets.bottom + SPACE.snug },
+        ]}
+      >
+        <View style={styles.turnBar}>
+        <TurnButton
+          theme={theme}
+          facing={layoutIsRTL() ? 'right' : 'left'}
+          label="Previous page"
           disabled={isFirstPage}
-          onPress={() => setPageIndex(pageIndex - 1)}
-        >
-          <Text style={[styles.navButtonText, { color: theme.text }]}>◀</Text>
-        </Pressable>
-
-        <Pressable
-          style={[
-            styles.nextButton,
-            { backgroundColor: night ? '#5B6ABF' : story.color },
-            isLastPage && styles.navButtonDisabled,
-          ]}
+          onPress={() => turn(pageIndex - 1)}
+        />
+        <View style={styles.pips}>
+          {story.pages.map((_, i) => (
+            <View
+              key={i}
+              style={[
+                styles.pip,
+                { borderColor: theme.onGround },
+                i === pageIndex && { backgroundColor: theme.onGround },
+              ]}
+            />
+          ))}
+        </View>
+        <TurnButton
+          theme={theme}
+          facing={layoutIsRTL() ? 'left' : 'right'}
+          label="Next page"
           disabled={isLastPage}
-          onPress={() => setPageIndex(pageIndex + 1)}
-        >
-          <Text style={styles.nextButtonText}>Next page</Text>
-        </Pressable>
-
-        <Pressable
-          style={[
-            styles.navButton,
-            { backgroundColor: theme.pill, borderColor: theme.pillBorder },
-            isLastPage && styles.navButtonDisabled,
-          ]}
-          disabled={isLastPage}
-          onPress={() => setPageIndex(pageIndex + 1)}
-        >
-          <Text style={[styles.navButtonText, { color: theme.text }]}>▶</Text>
-        </Pressable>
+          onPress={() => turn(pageIndex + 1)}
+        />
+        </View>
       </View>
     </View>
   );
 }
 
+function TurnButton({
+  theme,
+  facing,
+  label,
+  disabled,
+  onPress,
+}: {
+  theme: Theme;
+  facing: 'left' | 'right';
+  label: string;
+  disabled: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled }}
+      hitSlop={10}
+      style={({ pressed }) => [
+        styles.turn,
+        { borderColor: theme.onGround },
+        disabled && styles.turnDisabled,
+        pressed && !disabled && { backgroundColor: theme.groundDeep },
+      ]}
+    >
+      <IconChevron size={22} color={theme.onGround} facing={facing} />
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  // A horizontal ScrollView inside a flex column stretches to fill the
-  // remaining height unless told not to, which would blow the pills up into
-  // tall bars. flexGrow: 0 makes it hug its content.
-  languageScroll: { flexGrow: 0, flexShrink: 0 },
-  languageRow: {
+
+  bar: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 20,
-    paddingTop: 14,
-    paddingBottom: 6,
+    paddingHorizontal: SPACE.gutter,
+    paddingBottom: SPACE.snug,
   },
-  langPill: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 999, borderWidth: 2 },
-  langPillText: { fontSize: 14, fontWeight: '800' },
-  pageScroll: {
+  barButton: { width: 30, alignItems: 'flex-start' },
+  barTitle: { flex: 1, alignItems: 'center' },
+  barTitleText: { writingDirection: 'rtl' },
+
+  scroll: {
+    paddingHorizontal: SPACE.gutter,
+    paddingTop: SPACE.base,
+    alignItems: 'center',
     flexGrow: 1,
+  },
+  column: { width: '100%', maxWidth: 560, flex: 1 },
+
+  trackRow: { flexDirection: 'row', gap: SPACE.tight, marginBottom: SPACE.base },
+  track: {
+    borderWidth: RULE.hair,
+    paddingHorizontal: SPACE.base,
+    minHeight: TARGET,
+    minWidth: TARGET,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
   },
-  // Capped so the page keeps book-like proportions on a tablet or a wide
-  // browser window; without it the illustration grows until the text is pushed
-  // off screen.
-  pageCard: {
-    width: '100%',
-    maxWidth: 520,
-    borderRadius: 28,
-    borderWidth: 2,
-    padding: 24,
+
+  sheet: { flex: 1, width: '100%' },
+  page: { width: '100%', flex: 1 },
+  block: { width: '100%', borderBottomWidth: RULE.heavy, overflow: 'hidden' },
+  blockArt: { aspectRatio: 4 / 3 },
+  // A block with no picture in it does not deserve the same height as one with
+  // a picture: the reading column gets the difference.
+  blockSet: { aspectRatio: 16 / 9 },
+  // The night impression: the press ground overprinted across the block so the
+  // brightest thing at bedtime is not an untreated daylight photograph.
+  nightPass: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.34 },
+  media: { width: '100%', height: '100%' },
+
+  text: { padding: SPACE.base, flex: 1 },
+  rtl: { writingDirection: 'rtl', textAlign: 'right' },
+  secondPass: { marginTop: SPACE.base, paddingTop: SPACE.snug, borderTopWidth: RULE.hair },
+
+  folio: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: SPACE.base,
+    marginTop: SPACE.snug,
+  },
+  folioNumber: { includeFontPadding: false },
+  folioMeta: { alignItems: 'flex-start', gap: SPACE.tight, paddingBottom: SPACE.snug },
+  secondPassButton: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: SPACE.tight,
+    borderWidth: RULE.hair,
+    paddingHorizontal: SPACE.base,
+    minHeight: TARGET,
   },
-  illustrationFrame: {
+  secondPassLabel: { fontWeight: '700' },
+
+  // The turn controls belong to the page, not to the screen edge: without the
+  // measure they splay to the far corners on a tablet or desktop window.
+  turnBarOuter: {
+    alignItems: 'center',
+    paddingHorizontal: SPACE.gutter,
+    paddingTop: SPACE.snug,
+    borderTopWidth: RULE.keyline,
+  },
+  turnBar: {
     width: '100%',
-    aspectRatio: 4 / 3,
-    borderRadius: 18,
-    overflow: 'hidden',
-    marginBottom: 18,
-  },
-  illustration: { width: '100%', height: '100%' },
-  pageEmoji: { fontSize: 52, marginBottom: 18 },
-  pageText: { fontSize: 21, lineHeight: 34, textAlign: 'left', fontWeight: '500' },
-  rtlText: { writingDirection: 'rtl', textAlign: 'right' },
-  translationBlock: {
-    marginTop: 18,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    width: '100%',
-  },
-  translationText: { fontSize: 16, lineHeight: 25, fontWeight: '500', textAlign: 'left' },
-  pageCounter: { marginTop: 14, fontSize: 13, fontWeight: '700' },
-  translateRow: { alignItems: 'center', paddingBottom: 10 },
-  translateButton: { paddingHorizontal: 18, paddingVertical: 9, borderRadius: 999, borderWidth: 2 },
-  translateText: { fontSize: 13, fontWeight: '800' },
-  dots: { flexDirection: 'row', justifyContent: 'center', gap: 8, marginBottom: 12 },
-  dot: { width: 8, height: 8, borderRadius: 4 },
-  dotActive: { width: 22 },
-  controls: {
+    maxWidth: 560,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingBottom: 28,
-    paddingTop: 8,
   },
-  navButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+  turn: {
+    borderWidth: RULE.keyline,
+    paddingHorizontal: SPACE.wide,
+    minHeight: TARGET,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
   },
-  navButtonDisabled: { opacity: 0.3 },
-  navButtonText: { fontSize: 18 },
-  nextButton: {
-    paddingHorizontal: 30,
-    paddingVertical: 17,
-    borderRadius: 999,
-    shadowColor: '#3A2E5C',
-    shadowOpacity: 0.18,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 5 },
-    elevation: 3,
-  },
-  nextButtonText: { fontSize: 16, fontWeight: '800', color: '#FFFFFF' },
+  turnDisabled: { opacity: 0.32 },
+  pips: { flexDirection: 'row', gap: SPACE.tight },
+  pip: { width: 9, height: 9, borderWidth: RULE.hair },
 });

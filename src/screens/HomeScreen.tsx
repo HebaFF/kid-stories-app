@@ -1,28 +1,69 @@
 import { useMemo, useState } from 'react';
-import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { STORIES } from '../data/stories';
-import { AGE_BANDS, AgeBand, StoryMood } from '../types';
+import { illustrationFor } from '../data/illustrations';
+import { AGE_BANDS, type AgeBand, type Story, type StoryMood } from '../types';
+import { RULE, SPACE, TARGET, TYPE, type Ink, type Theme } from '../theme';
+import { Halftone, InkTitle, Plate, PressBlock, Rule, Stamp } from '../design/Press';
+import { IconClock, IconMoon, IconSun, PressMark } from '../design/icons';
+import { plateInk } from '../design/storyInk';
 import { useMode } from '../ModeContext';
 import type { ModePreference } from '../services/timeOfDay';
 import type { RootStackParamList } from '../../App';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
 type MoodFilter = StoryMood | 'all';
 
-const MODE_OPTIONS: { value: ModePreference; label: string }[] = [
-  { value: 'auto', label: 'Auto' },
-  { value: 'day', label: '☀️ Day' },
-  { value: 'night', label: '🌙 Night' },
+/**
+ * Arabic-Indic numerals. An Egyptian magazine sets its page numbers and its
+ * ages in ٠١٢٣, and rendering them in Latin digits is the small tell that a
+ * layout was built for English and translated afterwards.
+ */
+const ARABIC_DIGITS = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+export function toArabicDigits(value: string | number): string {
+  return String(value).replace(/\d/g, (d) => ARABIC_DIGITS[Number(d)]);
+}
+
+const MODES: { value: ModePreference; label: string }[] = [
+  { value: 'auto', label: 'auto' },
+  { value: 'day', label: 'day' },
+  { value: 'night', label: 'night' },
 ];
+
+const AGE_LABELS: Record<AgeBand | 'all', string> = {
+  all: 'كل الأعمار',
+  '2-4': toArabicDigits('2-4'),
+  '5-7': toArabicDigits('5-7'),
+  '8-10': toArabicDigits('8-10'),
+};
+
+const MOOD_LABELS: Record<MoodFilter, string> = {
+  bedtime: 'قبل النوم',
+  daytime: 'بالنهار',
+  any: 'أي وقت',
+  all: 'كل الحكايات',
+};
 
 export default function HomeScreen({ navigation }: Props) {
   const { theme, night, preference, setPreference } = useMode();
+  const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  // A magazine opens wider on a bigger sheet: past this the grid runs three-up
+  // inside a broader measure rather than centring a phone column in empty ink.
+  const spread = width >= 900;
   const [age, setAge] = useState<AgeBand | 'all'>('all');
-  // The mood filter is not stored: it follows day/night unless the parent
-  // overrides it for this visit. At 8pm you want bedtime stories without
-  // having to ask for them.
   const [moodOverride, setMoodOverride] = useState<MoodFilter | null>(null);
   const mood: MoodFilter = moodOverride ?? (night ? 'bedtime' : 'daytime');
 
@@ -36,173 +77,355 @@ export default function HomeScreen({ navigation }: Props) {
     [age, mood]
   );
 
-  const moodOptions: { value: MoodFilter; label: string }[] = [
-    { value: 'bedtime', label: '🌙 Bedtime' },
-    { value: 'daytime', label: '☀️ Daytime' },
-    { value: 'all', label: 'All stories' },
-  ];
+  const [lead, ...rest] = stories;
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.bg }]}>
-      <View style={styles.hero}>
-        <Text style={[styles.kicker, { color: night ? '#9C8BE0' : '#B173F5' }]}>
-          {night ? 'BEDTIME' : 'STORY TIME'}
-        </Text>
-        <Text style={[styles.header, { color: theme.text }]}>
-          {night ? 'Time to wind\ndown 🌙' : 'What shall we\nread today? 🌈'}
-        </Text>
-      </View>
+    <View style={[styles.container, { backgroundColor: theme.ground }]}>
+      <Halftone theme={theme} pitch={7} />
+      <ScrollView
+        contentContainerStyle={[
+          styles.scroll,
+          { paddingTop: insets.top + SPACE.base, paddingBottom: insets.bottom + SPACE.band },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={[styles.column, spread && styles.columnSpread]}>
+        <Masthead theme={theme} count={stories.length} />
 
-      <View style={styles.filters}>
-        <FilterRow label="Mode">
-          {MODE_OPTIONS.map((option) => (
-            <Chip
-              key={option.value}
-              label={option.label}
-              active={preference === option.value}
-              onPress={() => setPreference(option.value)}
+        <View style={styles.apparatus}>
+          <StampRow>
+            {MODES.map((option) => {
+              const active = preference === option.value;
+              const Icon =
+                option.value === 'day' ? IconSun : option.value === 'night' ? IconMoon : IconClock;
+              return (
+                <Pressable
+                  key={option.value}
+                  onPress={() => setPreference(option.value)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${option.label} issue`}
+                  accessibilityState={{ selected: active }}
+                  style={[
+                    styles.iconStamp,
+                    {
+                      borderColor: theme.onGround,
+                      backgroundColor: active ? theme.onGround : 'transparent',
+                    },
+                  ]}
+                >
+                  <Icon size={17} color={active ? theme.ground : theme.onGround} />
+                </Pressable>
+              );
+            })}
+
+            <View style={styles.apparatusGap} />
+
+            {(['all', ...AGE_BANDS] as (AgeBand | 'all')[]).map((band) => (
+              <FilterStamp
+                key={band}
+                theme={theme}
+                label={AGE_LABELS[band]}
+                arabic
+                active={age === band}
+                onPress={() => setAge(band)}
+              />
+            ))}
+          </StampRow>
+
+          <StampRow>
+            {(['bedtime', 'daytime', 'all'] as MoodFilter[]).map((value) => (
+              <FilterStamp
+                key={value}
+                theme={theme}
+                label={MOOD_LABELS[value]}
+                arabic
+                active={mood === value}
+                onPress={() => setMoodOverride(value)}
+              />
+            ))}
+          </StampRow>
+        </View>
+
+        {lead ? (
+          <>
+            <StoryPlate
+              theme={theme}
+              night={night}
+              story={lead}
+              index={0}
+              lead
+              onPress={() => navigation.navigate('Story', { storyId: lead.id })}
             />
-          ))}
-        </FilterRow>
-
-        <FilterRow label="Age">
-          <Chip label="All ages" active={age === 'all'} onPress={() => setAge('all')} />
-          {AGE_BANDS.map((band) => (
-            <Chip key={band} label={band} active={age === band} onPress={() => setAge(band)} />
-          ))}
-        </FilterRow>
-
-        <FilterRow label="When">
-          {moodOptions.map((option) => (
-            <Chip
-              key={option.value}
-              label={option.label}
-              active={mood === option.value}
-              onPress={() => setMoodOverride(option.value)}
-            />
-          ))}
-        </FilterRow>
-      </View>
-
-      <FlatList
-        data={stories}
-        keyExtractor={(story) => story.id}
-        contentContainerStyle={styles.list}
-        ListEmptyComponent={
-          <Text style={[styles.empty, { color: theme.textMuted }]}>
-            No stories match these filters yet. Try “All stories”.
-          </Text>
-        }
-        renderItem={({ item }) => (
-          <Pressable
-            style={({ pressed }) => [
-              styles.card,
-              { backgroundColor: theme.card, borderColor: night ? theme.cardBorder : item.color },
-              pressed && styles.cardPressed,
-            ]}
-            onPress={() => navigation.navigate('Story', { storyId: item.id })}
-          >
-            <View style={[styles.badge, { backgroundColor: night ? theme.bg : item.tint }]}>
-              <Text style={styles.badgeEmoji}>{item.emoji}</Text>
+            <View style={styles.grid}>
+              {rest.map((story, i) => (
+                <StoryPlate
+                  key={story.id}
+                  theme={theme}
+                  night={night}
+                  story={story}
+                  index={i + 1}
+                  onPress={() => navigation.navigate('Story', { storyId: story.id })}
+                  style={spread ? styles.gridItemSpread : styles.gridItem}
+                />
+              ))}
             </View>
-            <View style={styles.cardBody}>
-              <Text style={[styles.cardTitle, { color: theme.text }]}>{item.title.en}</Text>
-              <Text style={[styles.cardArabic, { color: theme.textMuted }]}>
-                {item.title['ar-EG']}
+          </>
+        ) : (
+          <View style={styles.empty}>
+            <PressMark size={44} color={theme.onGroundMuted} />
+            <Text style={[TYPE.storyAr, styles.emptyText, { color: theme.onGround }]}>
+              مفيش حكايات بالمواصفات دي.
+            </Text>
+            <Pressable onPress={() => setMoodOverride('all')} accessibilityRole="button">
+              <Text style={[TYPE.stamp, { color: theme.onGroundMuted }]}>
+                {'SHOW EVERY STORY'}
               </Text>
-              <View style={styles.cardMetaRow}>
-                <View style={[styles.tag, { backgroundColor: night ? theme.bg : item.tint }]}>
-                  <Text style={[styles.tagText, { color: night ? theme.textMuted : item.color }]}>
-                    {item.ageBands.join(' · ')}
-                  </Text>
-                </View>
-                <View style={[styles.tag, { backgroundColor: night ? theme.bg : item.tint }]}>
-                  <Text style={[styles.tagText, { color: night ? theme.textMuted : item.color }]}>
-                    {item.minutes} min
-                  </Text>
-                </View>
-                <Text style={[styles.origin, { color: theme.textMuted }]}>{item.origin}</Text>
-              </View>
-            </View>
-            <Text style={[styles.chevron, { color: night ? theme.textMuted : item.color }]}>›</Text>
-          </Pressable>
+            </Pressable>
+          </View>
         )}
-      />
-    </View>
-  );
-}
-
-function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
-  const { theme } = useMode();
-  return (
-    <View style={styles.filterRow}>
-      <Text style={[styles.filterLabel, { color: theme.textMuted }]}>{label}</Text>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-        {children}
+        </View>
       </ScrollView>
     </View>
   );
 }
 
-function Chip({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
-  const { theme, night } = useMode();
-  const activeBg = night ? '#5B6ABF' : '#7C5CFC';
+function Masthead({ theme, count }: { theme: Theme; count: number }) {
+  return (
+    <View style={[styles.masthead, { backgroundColor: theme.groundDeep }]}>
+      <Halftone theme={theme} pitch={5} />
+      <InkTitle
+        theme={theme}
+        rtl
+        shadowInk={theme.chrome}
+        style={[TYPE.masthead, { color: theme.onGround }]}
+      >
+        حكايات مصرية
+      </InkTitle>
+      <Rule theme={theme} weight={RULE.heavy} color={theme.onGround} style={styles.mastheadRule} />
+      <View style={styles.mastheadFoot}>
+        <Text style={[TYPE.stamp, styles.mastheadLatin, { color: theme.onGround }]}>
+          EGYPTIAN STORIES
+        </Text>
+        <Text style={[TYPE.stamp, styles.mastheadLatin, { color: theme.onGround }]}>
+          {toArabicDigits(count)} حكاية
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+function StampRow({ children }: { children: React.ReactNode }) {
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={styles.stampScroll}
+      contentContainerStyle={styles.stampRow}
+    >
+      {children}
+    </ScrollView>
+  );
+}
+
+function FilterStamp({
+  theme,
+  label,
+  active,
+  onPress,
+  arabic = false,
+}: {
+  theme: Theme;
+  label: string;
+  active: boolean;
+  onPress: () => void;
+  arabic?: boolean;
+}) {
   return (
     <Pressable
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected: active }}
       style={[
-        styles.chip,
-        { backgroundColor: active ? activeBg : theme.pill, borderColor: active ? activeBg : theme.pillBorder },
+        styles.filterStamp,
+        {
+          borderColor: theme.onGround,
+          backgroundColor: active ? theme.onGround : 'transparent',
+        },
       ]}
     >
-      <Text style={[styles.chipText, { color: active ? '#FFFFFF' : theme.textMuted }]}>{label}</Text>
+      <Text
+        style={[
+          arabic ? TYPE.stampAr : TYPE.stamp,
+          { color: active ? theme.ground : theme.onGround },
+        ]}
+      >
+        {label}
+      </Text>
+    </Pressable>
+  );
+}
+
+function StoryPlate({
+  theme,
+  night,
+  story,
+  index,
+  onPress,
+  lead = false,
+  style,
+}: {
+  theme: Theme;
+  night: boolean;
+  story: Story;
+  index: number;
+  onPress: () => void;
+  lead?: boolean;
+  style?: StyleProp<ViewStyle>;
+}) {
+  const inkKey = plateInk(story.id, index);
+  const ink = inkKey === 'ink' ? theme.ink : theme[inkKey as Ink];
+  const art = illustrationFor(story.id, 0);
+
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${story.title.en}. ${story.ageBands.join(', ')}. ${story.minutes} minutes.`}
+      style={({ pressed }) => [style, pressed && styles.pressed]}
+    >
+      <Plate theme={theme} style={lead ? styles.leadPlate : styles.plate}>
+        <View style={[styles.block, { aspectRatio: lead ? 16 / 10 : 4 / 3, borderBottomColor: theme.ink }]}>
+          {art ? (
+            <>
+              <Image source={art} style={styles.art} resizeMode="cover" />
+              {night ? (
+                <View
+                  pointerEvents="none"
+                  style={[styles.nightPass, { backgroundColor: theme.ground }]}
+                />
+              ) : null}
+            </>
+          ) : (
+            <PressBlock
+              theme={theme}
+              ink={ink}
+              title={story.title['ar-EG']}
+              scale={lead ? 'lead' : 'grid'}
+            />
+          )}
+        </View>
+
+        <View style={[styles.plateBody, lead && styles.leadBody]}>
+          {art ? (
+            <InkTitle
+              theme={theme}
+              rtl
+              shadowInk={ink}
+              offset={lead ? 2.5 : 2}
+              style={[lead ? TYPE.leadTitleAr : TYPE.plateTitleAr, { color: theme.ink }]}
+            >
+              {story.title['ar-EG']}
+            </InkTitle>
+          ) : null}
+          <Text
+            style={[
+              lead ? TYPE.leadTitleEn : TYPE.plateTitleEn,
+              styles.titleEn,
+              { color: theme.inkBody },
+            ]}
+            numberOfLines={2}
+          >
+            {story.title.en}
+          </Text>
+
+          <View style={styles.plateStamps}>
+            <Stamp theme={theme} label={story.ageBands.join(' · ')} color={ink} />
+            <Stamp
+              theme={theme}
+              label={`${story.minutes} min`}
+              color={theme.ink}
+              filled={!lead ? false : true}
+            />
+          </View>
+          <Text style={[TYPE.stamp, styles.origin, { color: theme.inkMuted }]} numberOfLines={1}>
+            {story.origin.toUpperCase()}
+          </Text>
+        </View>
+      </Plate>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  hero: { paddingHorizontal: 24, paddingTop: 28, paddingBottom: 14 },
-  kicker: { fontSize: 13, fontWeight: '800', letterSpacing: 2, marginBottom: 6 },
-  header: { fontSize: 30, lineHeight: 36, fontWeight: '800' },
-  filters: { paddingBottom: 6, gap: 8 },
-  filterRow: { gap: 4 },
-  filterLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
-    paddingHorizontal: 24,
+  scroll: { paddingHorizontal: SPACE.gutter, alignItems: 'center' },
+  // The page has a measure. A magazine plate that grows to fill a desktop
+  // window is a different composition, not a larger one.
+  column: { width: '100%', maxWidth: 560 },
+  columnSpread: { maxWidth: 1040 },
+
+  masthead: {
+    marginBottom: SPACE.base,
+    paddingHorizontal: SPACE.base,
+    paddingTop: SPACE.snug,
+    paddingBottom: SPACE.snug,
+    overflow: 'hidden',
   },
-  chipRow: { paddingHorizontal: 20, gap: 8, paddingVertical: 2 },
-  chip: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: 999, borderWidth: 2 },
-  chipText: { fontSize: 13, fontWeight: '800' },
-  list: { paddingHorizontal: 20, paddingBottom: 24, paddingTop: 12, gap: 14 },
-  empty: { textAlign: 'center', paddingTop: 40, fontSize: 15, fontWeight: '600' },
-  card: {
-    borderRadius: 24,
-    padding: 14,
+  mastheadRule: { marginTop: SPACE.tight },
+  mastheadFoot: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-    borderWidth: 2,
-    shadowColor: '#3A2E5C',
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 3,
+    justifyContent: 'space-between',
+    marginTop: SPACE.tight,
   },
-  cardPressed: { opacity: 0.8, transform: [{ scale: 0.99 }] },
-  badge: { width: 64, height: 64, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
-  badgeEmoji: { fontSize: 34 },
-  cardBody: { flex: 1, gap: 4 },
-  cardTitle: { fontSize: 18, fontWeight: '800' },
-  // Kept left-aligned so it sits directly under the English title. Arabic
-  // letter shaping is automatic and does not depend on writingDirection.
-  cardArabic: { fontSize: 14, fontWeight: '600', textAlign: 'left' },
-  cardMetaRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4, flexWrap: 'wrap' },
-  tag: { paddingHorizontal: 10, paddingVertical: 3, borderRadius: 999 },
-  tagText: { fontSize: 11, fontWeight: '800', letterSpacing: 0.3 },
-  origin: { fontSize: 11, fontWeight: '600' },
-  chevron: { fontSize: 28, fontWeight: '800' },
+  mastheadLatin: { fontWeight: '700' },
+
+  apparatus: { gap: SPACE.tight, marginBottom: SPACE.wide },
+  apparatusGap: { width: SPACE.snug },
+  stampScroll: { flexGrow: 0 },
+  stampRow: { flexDirection: 'row', alignItems: 'center', gap: SPACE.tight, paddingVertical: 2 },
+  filterStamp: {
+    borderWidth: RULE.hair,
+    paddingHorizontal: SPACE.base,
+    minHeight: TARGET,
+    minWidth: TARGET,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconStamp: {
+    borderWidth: RULE.hair,
+    paddingHorizontal: SPACE.snug,
+    minHeight: TARGET,
+    minWidth: TARGET,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  plate: { flex: 1 },
+  leadPlate: { marginBottom: SPACE.gutter },
+  pressed: { opacity: 0.86 },
+
+  block: { width: '100%', borderBottomWidth: RULE.heavy },
+  art: { width: '100%', height: '100%' },
+  // The night impression, matching the reader: the press ground overprinted so
+  // a daylight block is not the brightest thing on a bedtime screen.
+  nightPass: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.34 },
+
+  plateBody: { padding: SPACE.snug, gap: SPACE.hair },
+  leadBody: { padding: SPACE.base },
+  titleEn: { marginTop: SPACE.hair, textAlign: 'right' },
+  plateStamps: {
+    flexDirection: 'row',
+    gap: SPACE.tight,
+    marginTop: SPACE.tight,
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+  },
+  origin: { marginTop: SPACE.tight, fontWeight: '600', textAlign: 'right' },
+
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: SPACE.gutter },
+  gridItem: { width: '47%', flexGrow: 1 },
+  gridItemSpread: { width: '31%', flexGrow: 1 },
+
+  empty: { alignItems: 'center', gap: SPACE.base, paddingVertical: SPACE.band * 2 },
+  emptyText: { textAlign: 'center', writingDirection: 'rtl' },
 });

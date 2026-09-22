@@ -23,7 +23,9 @@
     },
     "plugins": [
       "expo-audio",
-      "expo-video"
+      "expo-video",
+      "expo-font",
+      "expo-splash-screen"
     ],
     "experiments": {
       "baseUrl": "/kid-stories-app"

@@ -13,7 +13,8 @@ import type { ImageSourcePropType } from 'react-native';
  * between an app a parent will install and one they won't.
  *
  * Add a story's art by dropping the files in assets/illustrations/<story-id>/
- * and adding one line here. Pages with no entry fall back to the story emoji.
+ * and adding one line here. Pages with no entry render a composed press block (see PressBlock) —
+ * never an emoji, which this world does not use.
  */
 export const ILLUSTRATIONS: Record<string, ImageSourcePropType[]> = {
   'sun-boat': [
