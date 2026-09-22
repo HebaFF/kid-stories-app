@@ -24,6 +24,9 @@
     "plugins": [
       "expo-audio",
       "expo-video"
-    ]
+    ],
+    "experiments": {
+      "baseUrl": "/kid-stories-app"
+    }
   }
 }
