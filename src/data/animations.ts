@@ -17,7 +17,16 @@
  * needs a working connection.
  */
 export const ANIMATIONS: Record<string, (number | null)[]> = {
-  'sun-boat': [null, null, null, require('../../assets/illustrations/sun-boat/4.mp4')],
+  // Cut straight out of the film at /kite/, cropped to 4:3 above its caption
+  // strip so no burnt-in text comes with them. Eight seconds each, silent, and
+  // they loop — the page moves because it is the film, not because a still is
+  // being panned across. About 750KB a clip against 45KB for its poster.
+  'noors-kite': [
+    require('../../assets/illustrations/noors-kite/1.mp4'),
+    require('../../assets/illustrations/noors-kite/2.mp4'),
+    require('../../assets/illustrations/noors-kite/3.mp4'),
+    require('../../assets/illustrations/noors-kite/4.mp4'),
+  ],
 };
 
 export function animationFor(storyId: string, pageIndex: number): number | undefined {

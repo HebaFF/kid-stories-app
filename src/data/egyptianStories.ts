@@ -43,7 +43,11 @@ export const EGYPTIAN_STORIES: Story[] = [
     color: '#2F7D52',
     tint: '#DFEFE5',
     ageBands: ['2-4', '5-7'],
-    mood: 'daytime',
+    // 'any', not 'daytime'. The app opens on the bedtime shelf after 19:00, so
+    // a daytime-only story is invisible exactly when a parent is most likely to
+    // be looking. This one ends at sunset with everyone calm and happy, so it
+    // belongs on both shelves rather than being hidden by the clock.
+    mood: 'any',
     minutes: 3,
     origin: 'Original, set in Egypt today',
     title: {
