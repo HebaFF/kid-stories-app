@@ -29,6 +29,66 @@ const PASTEL =
 export const EGYPTIAN_STORIES: Story[] = [
   {
     /**
+     * Second story set in Egypt today. Written here rather than by Higgsfield,
+     * against the rules PRODUCT.md records: happy in its opening as well as its
+     * ending, nobody poor or bored or in trouble at any point, four pages, and
+     * a moral said plainly in the last line. Its subject is deliberately not
+     * [[noors-kite]]'s — that one is about sharing a thing you already have,
+     * this one is about adding something of your own.
+     *
+     * Art pending: the four prompts below are written for the same pastel film
+     * look as طيارة نور so the two sit together in the library.
+     */
+    id: 'the-colourful-wall',
+    emoji: '🎨',
+    color: '#F2B01E',
+    tint: '#FBEFD2',
+    ageBands: ['2-4', '5-7'],
+    mood: 'any',
+    minutes: 3,
+    origin: 'Original, set in Egypt today',
+    title: {
+      en: 'The Colourful Wall',
+      'ar-EG': 'الحيطة الملونة',
+      'ar-MSA': 'الجِدارُ المُلَوَّن',
+    },
+    pages: [
+      {
+        illustration: `${PASTEL}. A cheerful girl in a modern Cairo bedroom packing paintbrushes and colourful paint pots into a bag, morning sunlight through the window, plants on the sill, apartment buildings outside, excited and bright`,
+        text: {
+          en: 'Layla woke up before the alarm, because today was the day the whole street was going to paint the big wall together. She packed her brushes and every colour she owned, and she could not stop smiling.',
+          'ar-EG': 'ليلى صحيت قبل المنبه، عشان النهارده الشارع كله هيلون الحيطة الكبيرة مع بعض. حطت الفرش وكل الألوان اللي عندها في الشنطة، وفضلت مبتسمة طول الوقت.',
+          'ar-MSA': 'اسْتَيْقَظَتْ لَيْلى قَبْلَ المُنَبِّه، لِأَنَّ الشّارِعَ كُلَّهُ سَيُلَوِّنُ اليَوْمَ الجِدارَ الكَبيرَ مَعًا. وَضَعَتْ فُرَشَها وَكُلَّ أَلْوانِها في الحَقيبَة، وَلَمْ تَتَوَقَّفْ عَنِ الابْتِسام.',
+        },
+      },
+      {
+        illustration: `${PASTEL}. A wide friendly street scene in present-day Cairo, neighbours and children of all ages gathered along a long pale wall with buckets of paint and brushes, laughing and waving, balconies and trees above, bright morning`,
+        text: {
+          en: 'She ran down with her brother Omar, and the whole street was already there — neighbours, friends, grandmothers, little ones. Everybody had a brush, and everybody was laughing.',
+          'ar-EG': 'نزلت هي وأخوها عمر، ولقت الشارع كله موجود — الجيران والأصحاب والستات الكبيرة والعيال الصغيرة. كل واحد ماسك فرشة، وكلهم بيضحكوا.',
+          'ar-MSA': 'نَزَلَتْ مَعَ أَخيها عُمَر، فَوَجَدَتِ الشّارِعَ كُلَّهُ هُناك — الجيرانُ وَالأَصْدِقاءُ وَالجَدّاتُ وَالصِّغار. كُلُّ واحِدٍ يُمْسِكُ فُرْشاةً، وَالجَميعُ يَضْحَكون.',
+        },
+      },
+      {
+        illustration: `${PASTEL}. Close warm view of children painting a mural on a wall together — a yellow sun, green palm trees, a small white felucca boat, birds — paint on their hands and cheeks, everyone delighted, sunny day`,
+        text: {
+          en: 'Omar painted a big yellow sun. Layla painted palm trees. A little boy painted a felucca with a sail, and a grandmother painted birds above it. Every single person put something of their own on the wall.',
+          'ar-EG': 'عمر رسم شمس صفرا كبيرة. وليلى رسمت نخل. وواحد ولد صغير رسم فلوكة بشراع، وتيتة رسمت عصافير فوقيها. كل واحد حط على الحيطة حاجة من عنده.',
+          'ar-MSA': 'رَسَمَ عُمَرُ شَمْسًا صَفْراءَ كَبيرَة. وَرَسَمَتْ لَيْلى نَخيلًا. وَرَسَمَ وَلَدٌ صَغيرٌ فَلوكَةً بِشِراع، وَرَسَمَتْ جَدَّةٌ عَصافيرَ فَوْقَها. كُلُّ واحِدٍ وَضَعَ عَلى الجِدارِ شَيْئًا مِنْ عِنْدِه.',
+        },
+      },
+      {
+        illustration: `${PASTEL}. The finished mural at golden hour — a long wall covered in a bright painted scene of sun, palms, a felucca and birds — the whole neighbourhood standing in front of it smiling and clapping, warm evening light over Cairo`,
+        text: {
+          en: 'By evening the plain wall had become the most beautiful thing on the street, and everyone stood back and clapped. Layla looked at it and said: "When everybody adds their own colour, the whole place turns beautiful."',
+          'ar-EG': 'ولما جه بالليل، الحيطة السادة بقت أحلى حاجة في الشارع، والكل وقف يتفرج ويصقف. ليلى بصت عليها وقالت: «لما كل واحد يحط لونه، الحتة كلها بتبقى أحلى.»',
+          'ar-MSA': 'وَعِنْدَ المَساء، صارَ الجِدارُ السّادَةُ أَجْمَلَ شَيْءٍ في الشّارِع، وَوَقَفَ الجَميعُ يُشاهِدونَ وَيُصَفِّقون. نَظَرَتْ لَيْلى إِلَيْهِ وَقالَتْ: «حينَ يَضَعُ كُلُّ واحِدٍ لَوْنَهُ، يُصْبِحُ المَكانُ كُلُّهُ أَجْمَل.»',
+        },
+      },
+    ],
+  },
+  {
+    /**
      * Written and illustrated by Higgsfield from a brief, then edited here.
      * It is the first story in the library set in Egypt as a child sees it
      * now — a flat with a balcony, a street of apartment blocks, a park —
