@@ -25,6 +25,12 @@ export const ILLUSTRATIONS: Record<string, ImageSourcePropType[]> = {
     require('../../assets/illustrations/noors-kite/3.jpg'),
     require('../../assets/illustrations/noors-kite/4.jpg'),
   ],
+  'the-colourful-wall': [
+    require('../../assets/illustrations/the-colourful-wall/1.jpg'),
+    require('../../assets/illustrations/the-colourful-wall/2.jpg'),
+    require('../../assets/illustrations/the-colourful-wall/3.jpg'),
+    require('../../assets/illustrations/the-colourful-wall/4.jpg'),
+  ],
 };
 
 export function illustrationFor(

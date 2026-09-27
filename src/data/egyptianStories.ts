@@ -36,8 +36,10 @@ export const EGYPTIAN_STORIES: Story[] = [
      * [[noors-kite]]'s — that one is about sharing a thing you already have,
      * this one is about adding something of your own.
      *
-     * Art pending: the four prompts below are written for the same pastel film
-     * look as طيارة نور so the two sit together in the library.
+     * Higgsfield drew and narrated it from these four sentences supplied
+     * verbatim, which is also what finally fixed its Arabic captions: handed
+     * finished Arabic rather than asked to produce it, its renderer shapes and
+     * orders the text correctly. The stills and clips are cut from that film.
      */
     id: 'the-colourful-wall',
     emoji: '🎨',

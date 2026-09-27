@@ -27,6 +27,12 @@ export const ANIMATIONS: Record<string, (number | null)[]> = {
     require('../../assets/illustrations/noors-kite/3.mp4'),
     require('../../assets/illustrations/noors-kite/4.mp4'),
   ],
+  'the-colourful-wall': [
+    require('../../assets/illustrations/the-colourful-wall/1.mp4'),
+    require('../../assets/illustrations/the-colourful-wall/2.mp4'),
+    require('../../assets/illustrations/the-colourful-wall/3.mp4'),
+    require('../../assets/illustrations/the-colourful-wall/4.mp4'),
+  ],
 };
 
 export function animationFor(storyId: string, pageIndex: number): number | undefined {

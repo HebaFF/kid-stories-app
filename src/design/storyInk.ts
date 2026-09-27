@@ -11,7 +11,7 @@ import type { Ink } from '../theme';
  */
 const PLATE_INK: Record<string, Ink | 'ink'> = {
   'star-on-the-nile': 'cobalt',
-  'sun-boat': 'chrome',
+  'day-at-the-museum': 'chrome',
   'cat-who-guarded': 'cobalt',
   'tortoise-and-hare': 'grass',
   'lion-and-hare': 'chrome',
