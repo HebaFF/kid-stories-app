@@ -246,20 +246,30 @@ export default function StoryScreen({ route, navigation }: Props) {
                 { borderBottomColor: theme.ink },
               ]}
             >
-              {animation ? (
-                <VideoView
-                  player={player}
-                  style={styles.media}
-                  contentFit="cover"
-                  nativeControls={false}
-                />
-              ) : illustration ? (
+              {animation || illustration ? (
                 <>
-                  <Animated.Image
-                    source={illustration}
-                    style={[styles.media, blockStyle]}
-                    resizeMode="cover"
-                  />
+                  {/* The still sits under the clip as its poster. Turning a page
+                      starts a new clip loading, and without this the block is an
+                      empty hole for as long as that takes — on a slow connection,
+                      long enough to look broken. Where there is no clip the still
+                      is the picture, and drifts. */}
+                  {illustration ? (
+                    <Animated.Image
+                      source={illustration}
+                      style={[styles.media, animation ? undefined : blockStyle]}
+                      resizeMode="cover"
+                    />
+                  ) : null}
+                  {animation ? (
+                    <VideoView
+                      player={player}
+                      style={[styles.media, styles.overlay]}
+                      contentFit="cover"
+                      nativeControls={false}
+                    />
+                  ) : null}
+                  {/* Overprint both, not just the still: a clip at full daylight
+                      brightness is the same defect in a dark bedroom. */}
                   {night ? (
                     <View
                       pointerEvents="none"
@@ -442,6 +452,8 @@ const styles = StyleSheet.create({
   // brightest thing at bedtime is not an untreated daylight photograph.
   nightPass: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.34 },
   media: { width: '100%', height: '100%' },
+  // The clip lies on top of its poster still rather than replacing it.
+  overlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
 
   text: { padding: SPACE.base, flex: 1 },
   rtl: { writingDirection: 'rtl', textAlign: 'right' },
