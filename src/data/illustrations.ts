@@ -17,11 +17,13 @@ import type { ImageSourcePropType } from 'react-native';
  * never an emoji, which this world does not use.
  */
 export const ILLUSTRATIONS: Record<string, ImageSourcePropType[]> = {
-  'sun-boat': [
-    require('../../assets/illustrations/sun-boat/1.jpg'),
-    require('../../assets/illustrations/sun-boat/2.jpg'),
-    require('../../assets/illustrations/sun-boat/3.jpg'),
-    require('../../assets/illustrations/sun-boat/4.jpg'),
+  // Stills lifted from the film at /kite/ rather than generated separately, so
+  // the page and the film show the same Cairo, the same children, the same kite.
+  'noors-kite': [
+    require('../../assets/illustrations/noors-kite/1.jpg'),
+    require('../../assets/illustrations/noors-kite/2.jpg'),
+    require('../../assets/illustrations/noors-kite/3.jpg'),
+    require('../../assets/illustrations/noors-kite/4.jpg'),
   ],
 };
 

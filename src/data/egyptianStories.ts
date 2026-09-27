@@ -22,52 +22,115 @@ import { STYLE } from './illustrationStyle';
  * As with all content in this app, the Arabic was drafted by an AI assistant
  * and needs a native Egyptian speaker's review before it reaches a child.
  */
+const PASTEL =
+  "pastel flat 2D children's illustration, soft warm palette, simple rounded shapes, " +
+  'flat colour with gentle shading, present-day Cairo, no text, no lettering';
+
 export const EGYPTIAN_STORIES: Story[] = [
   {
-    id: 'sun-boat',
-    emoji: '🌅',
-    color: '#C2703D',
-    tint: '#FAE6D5',
-    ageBands: ['2-4'],
-    mood: 'bedtime',
+    /**
+     * Written and illustrated by Higgsfield from a brief, then edited here.
+     * It is the first story in the library set in Egypt as a child sees it
+     * now — a flat with a balcony, a street of apartment blocks, a park —
+     * rather than in folk or ancient material, and the first that is happy
+     * in its opening as well as its ending. Both are rules PRODUCT.md now
+     * records. The art is lifted from the film at /kite/ on the web build,
+     * so the page and the film are the same world, which is why these four
+     * prompts carry the pastel style rather than the watercolour STYLE lock.
+     */
+    id: 'noors-kite',
+    emoji: '🪁',
+    color: '#2F7D52',
+    tint: '#DFEFE5',
+    ageBands: ['2-4', '5-7'],
+    mood: 'daytime',
     minutes: 3,
-    origin: 'Ancient Egyptian myth',
+    origin: 'Original, set in Egypt today',
     title: {
-      en: "The Sun's Night Boat",
-      'ar-EG': 'مركب الشمس في الليل',
-      'ar-MSA': 'مَرْكَبُ الشَّمْسِ في اللَّيْل',
+      en: "Nour's Kite",
+      'ar-EG': 'طيارة نور',
+      'ar-MSA': 'طائِرَةُ نور الوَرَقِيَّة',
     },
     pages: [
       {
-        illustration: `${STYLE}. A golden ancient Egyptian solar barque with a falcon prow and Eye of Horus, sailing high across a wide blue daytime sky above the Nile, green fields and distant pyramids below, the sun glowing warmly above it, calm and wondrous`,
+        illustration: `${PASTEL}. A happy girl on a sunny apartment balcony holding a bright rainbow paper kite, potted plants and flowers along the railing, modern Cairo buildings behind her, morning light`,
         text: {
-          en: 'All day long, the sun sails across the sky in a golden boat. It sails slowly, from one side of the sky to the other, warming the fields below.',
-          'ar-EG': 'طول النهار، الشمس بتبحر في السما في مركب دهبية. بتمشي بالراحة، من ناحية للناحية التانية، وبتدفي الغيطان اللي تحت.',
-          'ar-MSA': 'طَوالَ النَّهار، تُبْحِرُ الشَّمْسُ في السَّماءِ في مَرْكَبٍ ذَهَبِيّ. تَسيرُ بِبُطْء، مِنْ جِهَةٍ إِلى الجِهَةِ الأُخْرى، وَتُدَفِّئُ الحُقولَ في الأَسْفَل.',
+          en: 'It was morning in Cairo. Nour woke up happy and ran straight out to the balcony — and there was a bright paper kite, shining in the sun, waiting for her.',
+          'ar-EG': 'الصبح في القاهرة، نور صحيت مبسوطة وجريت على طول عالبلكونة. لقيت طيارة ورق ملونة بتلمع في الشمس، مستنياها.',
+          'ar-MSA': 'في الصَّباحِ بِالقاهِرَة، اسْتَيْقَظَتْ نور سَعيدَةً وَجَرَتْ فَوْرًا إِلى الشُّرْفَة. وَجَدَتْ طائِرَةً وَرَقِيَّةً مُلَوَّنَةً تَلْمَعُ في الشَّمْسِ في انْتِظارِها.',
         },
       },
       {
-        illustration: `${STYLE}. The same golden Egyptian solar barque with falcon prow and Eye of Horus, seen small and distant, sinking low behind western desert hills at sunset, sky washed orange then deep violet, palm trees in silhouette along the Nile, peaceful end of day, no people in the foreground`,
+        illustration: `${PASTEL}. A laughing girl and a boy walking together past modern Cairo apartment blocks with balconies and green trees, the rainbow kite tucked under her arm, bright blue sky`,
         text: {
-          en: 'When evening comes, the boat sails down behind the hills in the west. The sky turns orange, then pink, then a deep soft purple.',
-          'ar-EG': 'ولما بييجي المغرب، المركب بتنزل ورا التلال في الغرب. السما بتبقى برتقالي، وبعدين وردي، وبعدين بنفسجي غامق وهادي.',
-          'ar-MSA': 'وَحينَ يَأْتي المَساء، يَنْزِلُ المَرْكَبُ خَلْفَ التِّلالِ في الغَرْب. تُصْبِحُ السَّماءُ بُرْتُقالِيَّة، ثُمَّ وَرْدِيَّة، ثُمَّ بَنَفْسَجِيَّةً داكِنَةً هادِئَة.',
+          en: 'She called her friend Youssef from the window. They laughed, ran down the stairs together, and set off for the green park, happy with their whole day.',
+          'ar-EG': 'نادت على صاحبها يوسف من الشباك. ضحكوا ونزلوا سوا، وراحوا جري عالجنينة الخضرا، فرحانين بيومهم.',
+          'ar-MSA': 'نادَتْ صَديقَها يوسُف مِنَ النّافِذَة. ضَحِكا وَنَزَلا مَعًا، وَانْطَلَقا يَرْكُضانِ إِلى الحَديقَةِ الخَضْراء، سَعيدَيْنِ بِيَوْمِهِما.',
         },
       },
       {
-        illustration: `${STYLE}. The same golden Egyptian solar barque gliding quietly through a deep starry blue-black underworld river beneath the sleeping land, soft glowing stars above, no people, utterly calm and dreamlike, not frightening`,
+        illustration: `${PASTEL}. A boy clapping and a girl holding the kite string, both looking up delighted at a rainbow kite high in a blue sky above pastel apartment buildings and white clouds`,
         text: {
-          en: 'All night, the little boat sails quietly underneath the world, through the dark. It never stops. And up above, the stars stay awake and keep watch.',
-          'ar-EG': 'وطول الليل، المركب الصغيرة بتبحر بهدوء تحت الدنيا، في الضلمة. عمرها ما بتقف. وفوق، النجوم بتفضل صاحية وبتحرس.',
-          'ar-MSA': 'وَطَوالَ اللَّيْل، يُبْحِرُ المَرْكَبُ الصَّغيرُ بِهُدوءٍ تَحْتَ الأَرْض، في الظَّلام. لا يَتَوَقَّفُ أَبَدًا. وَفي الأَعْلى، تَبْقى النُّجومُ ساهِرَةً تَحْرُس.',
+          en: 'Youssef held the string and Nour lifted the kite. A little breeze came along and carried it up, up into the blue sky — higher than all the buildings.',
+          'ar-EG': 'يوسف مسك الخيط ونور رفعت الطيارة. جت نسمة هوا وطلّعتها فوق في السما الزرقا، أعلى من العمارات كلها.',
+          'ar-MSA': 'أَمْسَكَ يوسُفُ الخَيْطَ وَرَفَعَتْ نورُ الطّائِرَة. جاءَتْ نَسْمَةُ هَواءٍ فَحَمَلَتْها عالِيًا في السَّماءِ الزَّرْقاء، أَعْلى مِنَ العِماراتِ كُلِّها.',
         },
       },
       {
-        illustration: `${STYLE}. Soft pink dawn light rising over the eastern Nile horizon, the same golden Egyptian solar barque reappearing small on the horizon, and in the foreground one single small child asleep in bed beside an open window with warm dawn light falling in, only one child, reassuring and tender`,
+        illustration: `${PASTEL}. A large circle of smiling children of all ages gathered together in a sunny green park, one boy reaching up to the rainbow kite above them, trees and pastel buildings behind, warm afternoon light`,
         text: {
-          en: 'And every single morning, the boat comes back up in the east. So close your eyes now. The boat is sailing, and the sun will be here when you wake up.',
-          'ar-EG': 'وكل يوم الصبح، المركب بترجع تطلع من الشرق. فاقفلي عينيكي دلوقتي. المركب ماشية، والشمس هتكون هنا لما تصحي.',
-          'ar-MSA': 'وَفي كُلِّ صَباح، يَعودُ المَرْكَبُ لِيَطْلُعَ مِنَ الشَّرْق. فَأَغْمِضي عَيْنَيْكِ الآن. المَرْكَبُ يُبْحِر، وَالشَّمْسُ سَتَكونُ هُنا حينَ تَسْتَيْقِظين.',
+          en: 'All the children came running to watch. Nour passed the string around, one by one, and taught every single one of them how to fly it. By sunset they were all still laughing, and Nour said: "Playing is nicest when we share it and enjoy it together."',
+          'ar-EG': 'كل الأطفال جريوا يتفرجوا. نور دارت الخيط عليهم واحد واحد، وعلّمت كل واحد فيهم يطيّرها. ولحد المغرب كانوا لسه بيضحكوا، ونور قالت: «اللعب أحلى لما نتشارك ونفرح مع بعض.»',
+          'ar-MSA': 'جاءَ كُلُّ الأَطْفالِ يَرْكُضونَ لِيُشاهِدوا. أَدارَتْ نورُ الخَيْطَ عَلَيْهِمْ واحِدًا واحِدًا، وَعَلَّمَتْ كُلَّ واحِدٍ مِنْهُمْ كَيْفَ يُطَيِّرُها. وَحَتّى المَغْرِبِ ظَلّوا يَضْحَكون، وَقالَتْ نور: «اللَّعِبُ أَجْمَلُ حينَ نَتَشارَكُهُ وَنَفْرَحُ مَعًا.»',
+        },
+      },
+    ],
+  },
+  {
+    id: 'day-at-the-museum',
+    emoji: '🏛️',
+    color: '#1B4D9B',
+    tint: '#DDE6F5',
+    ageBands: ['5-7', '8-10'],
+    mood: 'daytime',
+    minutes: 4,
+    origin: 'Original, set in Egypt today',
+    title: {
+      en: 'A Day at the Big Museum',
+      'ar-EG': 'يوم في المتحف الكبير',
+      'ar-MSA': 'يَوْمٌ في المَتْحَفِ الكَبير',
+    },
+    pages: [
+      {
+        illustration: `${STYLE}. A bright modern school bus on the road to Giza filled with happy Egyptian children in school uniform singing and clapping together, one boy with his face happily pressed to the window pointing at palm trees, sunshine, balloons of colour, the pyramids ahead on the horizon, joyful and full of energy`,
+        text: {
+          en: 'The bus to Giza was full of singing. The whole class clapped along, and Adam sat with his face against the window counting palm trees, because today was the day of the Big Museum and he could not wait.',
+          'ar-EG': 'الأتوبيس وهو رايح الجيزة كان مليان غنا. الفصل كله بيصقف مع بعض، وآدم قاعد لازق بوشه في الشباك بيعدّ النخل، عشان النهارده يوم المتحف الكبير وهو مش مستني.',
+          'ar-MSA': 'كانَتِ الحافِلَةُ في طَريقِها إِلى الجيزَةِ مَمْلوءَةً بِالغِناء. كانَ الفَصْلُ كُلُّهُ يُصَفِّقُ مَعًا، وَآدَمُ جالِسٌ يُلْصِقُ وَجْهَهُ بِالنّافِذَةِ يَعُدُّ النَّخيل، لِأَنَّ اليَوْمَ يَوْمُ المَتْحَفِ الكَبير، وَهُوَ لا يَكادُ يَنْتَظِر.',
+        },
+      },
+      {
+        illustration: `${STYLE}. The vast sunlit interior of the Grand Egyptian Museum, a colossal stone king rising above a grand staircase, delighted school children running and pointing with wide eyes and huge smiles, gold gleaming everywhere, light pouring through enormous windows, wonder and excitement`,
+        text: {
+          en: 'Inside, everything was enormous. A stone king taller than a house. Gold shining in every direction. Adam ran from one wonder to the next with his eyes as wide as they would go, and his friends kept shouting, "Come and see this one!"',
+          'ar-EG': 'جوه، كل حاجة كانت ضخمة. ملك من حجر أطول من بيت. ودهب بيلمع في كل ناحية. آدم كان بيجري من عجيبة للتانية وعينيه مفتوحة على الآخر، وأصحابه مش بطالين نداء: «تعالى شوف ده!»',
+          'ar-MSA': 'في الدّاخِل، كانَ كُلُّ شَيْءٍ ضَخْمًا. مَلِكٌ مِنْ حَجَرٍ أَطْوَلُ مِنْ بَيْت. وَذَهَبٌ يَلْمَعُ في كُلِّ اتِّجاه. كانَ آدَمُ يَرْكُضُ مِنْ عَجيبَةٍ إِلى أُخْرى وَعَيْناهُ مُتَّسِعَتانِ إِلى أَقْصاهُما، وَأَصْدِقاؤُهُ يُنادونَهُ بِلا تَوَقُّف: «تَعالَ انْظُرْ إِلى هٰذا!»',
+        },
+      },
+      {
+        illustration: `${STYLE}. Close warm view of a smiling boy crouched at a low glass case, his face lit with delight, looking at a small worn linen ball and a little carved wooden animal inside, the grand golden museum hall glowing softly behind him`,
+        text: {
+          en: 'Then he spotted a little case right at his own eye level. Inside was a ball — sewn from linen, gone soft on one side from being played with. The card said: a toy, three thousand years old. Adam grinned an enormous grin. Someone exactly his size had thrown that ball, and caught it, and dropped it, and laughed.',
+          'ar-EG': 'وبعدين لمح فاترينة صغيرة قدام عينيه بالظبط. جواها كورة — متخيطة من كتان، وناحية منها بقت نعمة من كتر اللعب. الكارت مكتوب عليه: لعبة، عمرها تلات آلاف سنة. آدم ابتسم ابتسامة كبيرة أوي. فيه حد قدّه بالظبط رمى الكورة دي، ولقفها، ووقّعها، وضحك.',
+          'ar-MSA': 'ثُمَّ لَمَحَ خِزانَةً صَغيرَةً أَمامَ عَيْنَيْهِ تَمامًا. في داخِلِها كُرَة — مَخيطَةٌ مِنَ الكَتّان، وَقَدْ نَعُمَ أَحَدُ جَوانِبِها مِنْ كَثْرَةِ اللَّعِب. وَعَلى البِطاقَة: لُعْبَة، عُمْرُها ثَلاثَةُ آلافِ عام. ابْتَسَمَ آدَمُ ابْتِسامَةً عَريضَة. أَحَدٌ في مِثْلِ حَجْمِهِ تَمامًا رَمى هٰذِهِ الكُرَةَ وَالْتَقَطَها وَأَوْقَعَها وَضَحِك.',
+        },
+      },
+      {
+        illustration: `${STYLE}. The school bus heading home in golden afternoon light, children singing and laughing together, one happy boy standing up telling the others an animated story with his hands, everyone turned toward him grinning, warm sunset over Cairo through the windows`,
+        text: {
+          en: 'He asked the guide a hundred questions and she laughed and answered every one. On the bus home the class sang the whole way, and Adam told everybody about the ball. Three thousand years ago there was a child exactly like you, playing and laughing. We are all much closer to one another than we think.',
+          'ar-EG': 'سأل المرشدة ميت سؤال، وهي ضحكت وجاوبته على كلهم. وفي الأتوبيس وهما راجعين، الفصل غنى طول الطريق، وآدم فضل يحكي لكل حد عن الكورة. من تلات آلاف سنة كان فيه طفل زيك بالظبط بيلعب وبيضحك. إحنا مش بعاد عن بعض قد ما إحنا فاكرين.',
+          'ar-MSA': 'سَأَلَ المُرْشِدَةَ مِئَةَ سُؤال، فَضَحِكَتْ وَأَجابَتْ عَنْها كُلِّها. وَفي الحافِلَةِ عائِدين، غَنّى الفَصْلُ طَوالَ الطَّريق، وَظَلَّ آدَمُ يَحْكي لِلْجَميعِ عَنِ الكُرَة. مُنْذُ ثَلاثَةِ آلافِ عامٍ كانَ هُناكَ طِفْلٌ مِثْلُكَ تَمامًا يَلْعَبُ وَيَضْحَك. نَحْنُ أَقْرَبُ إِلى بَعْضِنا مِمّا نَظُنّ.',
         },
       },
     ],
