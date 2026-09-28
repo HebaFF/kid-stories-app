@@ -29,6 +29,62 @@ const PASTEL =
 export const EGYPTIAN_STORIES: Story[] = [
   {
     /**
+     * Third story set in Egypt today. Its moral is deliberately not the one
+     * [[noors-kite]] or [[the-colourful-wall]] carries — those are both about
+     * what you give to other people, this one is about wanting to know. The
+     * grandfather never says "don't ask"; the whole story is adults being
+     * pleased to be asked, which is the point.
+     */
+    id: 'a-million-questions',
+    emoji: '❓',
+    color: '#1B4D9B',
+    tint: '#DDE6F5',
+    ageBands: ['2-4', '5-7'],
+    mood: 'any',
+    minutes: 3,
+    origin: 'Original, set in Egypt today',
+    title: {
+      en: 'A Million Questions',
+      'ar-EG': 'مليون سؤال',
+      'ar-MSA': 'مِلْيونُ سُؤال',
+    },
+    pages: [
+      {
+        illustration: `${PASTEL}. A delighted little girl and her smiling grandfather at a warm neighbourhood bakery in present-day Cairo, the baker laughing and opening a bright oven full of puffing round bread, morning light, modern street outside`,
+        text: {
+          en: "Salma went out with Grandpa Hassan to fetch the bread, happy the whole way. At the bakery she asked, \"Why does the bread puff up like that?\" The baker laughed and opened the oven so she could see it happen.",
+          'ar-EG': 'سلمى نزلت مع جدو حسن يجيبوا العيش، وهي فرحانة بالمشوار. وعند الفرن سألت: «ليه العيش بينفخ كده؟» الفران ضحك وفتح لها الفرن عشان تشوفه وهو بينفخ.',
+          'ar-MSA': 'نَزَلَتْ سَلْمى مَعَ جَدِّها حَسَن لِيُحْضِرا الخُبْز، وَهِيَ سَعيدَةٌ طَوالَ الطَّريق. وَعِنْدَ المَخْبَزِ سَأَلَتْ: «لِماذا يَنْتَفِخُ الخُبْزُ هٰكَذا؟» ضَحِكَ الخَبّازُ وَفَتَحَ لَها الفُرْنَ لِتَرى.',
+        },
+      },
+      {
+        illustration: `${PASTEL}. A girl and her grandfather sitting on a bench in a sunny green Cairo park, both looking up and pointing at a neat line of birds flying across a blue sky, trees and apartment balconies behind them`,
+        text: {
+          en: "In the park she saw birds flying one behind another in a long line. \"Why do they fly like that?\" she asked. Grandpa said, \"Because the one in front breaks the wind for the ones behind. They are helping each other.\"",
+          'ar-EG': 'وفي الجنينة شافت عصافير طايرة ورا بعض في خط طويل. سألت: «ليه طايرين كده؟» جدو قال لها: «عشان اللي قدام بيكسر الهوا عن اللي وراه. بيساعدوا بعض.»',
+          'ar-MSA': 'وَفي الحَديقَةِ رَأَتْ عَصافيرَ تَطيرُ واحِدًا خَلْفَ الآخَرِ في صَفٍّ طَويل. سَأَلَتْ: «لِماذا تَطيرُ هٰكَذا؟» قالَ جَدُّها: «لِأَنَّ الَّذي في المُقَدِّمَةِ يَكْسِرُ الهَواءَ عَمَّنْ خَلْفَه. إِنَّها تُساعِدُ بَعْضَها.»',
+        },
+      },
+      {
+        illustration: `${PASTEL}. A cheerful old fisherman in a small wooden boat on the Nile showing a delighted girl and her grandfather the moving water, palm trees and modern Cairo buildings along the bank, bright afternoon`,
+        text: {
+          en: "By the Nile she asked Uncle Sayed the fisherman, \"Why does the water always go the same way?\" He smiled and said, \"Because the river is on its way to the sea. It has been walking there a very long time.\"",
+          'ar-EG': 'وعالنيل سألت عم سيد الصياد: «ليه الميه ماشية في اتجاه واحد؟» ابتسم وقال لها: «عشان النهر رايح للبحر. وماشي في السكة دي من زمان أوي.»',
+          'ar-MSA': 'وَعِنْدَ النّيلِ سَأَلَتْ عَمَّ سَيِّد الصَّيّاد: «لِماذا يَسيرُ الماءُ في اتِّجاهٍ واحِد؟» ابْتَسَمَ وَقالَ لَها: «لِأَنَّ النَّهْرَ ذاهِبٌ إِلى البَحْر. وَهُوَ يَسيرُ في هٰذا الطَّريقِ مُنْذُ زَمَنٍ بَعيد.»',
+        },
+      },
+      {
+        illustration: `${PASTEL}. A warm modern Cairo living room in golden evening light, a happy girl telling her smiling mother, father and grandfather everything she learned, her hands up as she talks, everyone delighted and listening`,
+        text: {
+          en: "At home she told Mama and Baba everything she had found out that day, all in one breath. Grandpa smiled and said: \"Every question you ask opens a new door for you.\"",
+          'ar-EG': 'رجعت البيت وحكت لماما وبابا كل حاجة عرفتها النهارده، على نفس واحد. جدو ابتسم وقال: «كل سؤال بتسأليه بيفتح لك باب جديد.»',
+          'ar-MSA': 'عادَتْ إِلى البَيْتِ وَحَكَتْ لِأُمِّها وَأَبيها كُلَّ ما عَرَفَتْهُ في ذٰلِكَ اليَوْم، في نَفَسٍ واحِد. ابْتَسَمَ جَدُّها وَقال: «كُلُّ سُؤالٍ تَسْأَلينَهُ يَفْتَحُ لَكِ بابًا جَديدًا.»',
+        },
+      },
+    ],
+  },
+  {
+    /**
      * Second story set in Egypt today. Written here rather than by Higgsfield,
      * against the rules PRODUCT.md records: happy in its opening as well as its
      * ending, nobody poor or bored or in trouble at any point, four pages, and
