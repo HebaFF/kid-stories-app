@@ -33,6 +33,16 @@ export const ANIMATIONS: Record<string, (number | null)[]> = {
     require('../../assets/illustrations/the-colourful-wall/3.mp4'),
     require('../../assets/illustrations/the-colourful-wall/4.mp4'),
   ],
+  // Kling animated each still separately (10 credits a clip) rather than the
+  // clips being cut from a film, because this story never had one. Each is the
+  // five-second render played forward then backwards, so it loops without a
+  // visible jump.
+  'a-million-questions': [
+    require('../../assets/illustrations/a-million-questions/1.mp4'),
+    require('../../assets/illustrations/a-million-questions/2.mp4'),
+    require('../../assets/illustrations/a-million-questions/3.mp4'),
+    require('../../assets/illustrations/a-million-questions/4.mp4'),
+  ],
 };
 
 export function animationFor(storyId: string, pageIndex: number): number | undefined {
