@@ -31,15 +31,42 @@ written. The narration script is a **separate, vocalised** copy of the same
 words. Without harakat the model guesses the vowels, and it guesses wrong on
 exactly the words a child would notice.
 
-The one that proves the point:
+The owner listened to طيارة نور and named the words that came out wrong.
+Every one of them is a case of the model reading an Egyptian word as if it
+were فصحى. Vowelise these, and anything shaped like them:
 
-| Written | Read as | Should be |
+| Written | Came out as | Should be |
 |---|---|---|
+| ولاقت | وَلاقَتْ | وِلاقِتْ |
+| ملونة | مُلَوَّنَة | مِلَوِّنَة |
+| طالعت | طالَعَتْ | طالْعِتْ |
+| عالي | عالٍ | عالي |
+| علّمت | عَلَّمَتْ | عَلِّمِتْ |
+| يطيّروها | يُطَيِّرُوها | يْطَيَّروها |
+| نتشارك | نَتَشارَكْ | نِتْشارِك |
 | على نفس واحد | عَلى نَفْس واحِد ("one self") | عَلى نَفَس واحِد ("in one breath") |
 
-Others worth vowelising every time, because they are dialect forms the model
-has little training on: كِدَه، لِيه، عَشان، المَيَّة، جِدُّو، الفَرَّان،
-السِّكَّة، الجِنِينَة، بِيِنْفُخ، بِيْساعْدوا، بِتِسْأَليه.
+The pattern is the same every time: فصحى puts a fatha where Egyptian puts a
+kasra or a sukun. عَلَّمَتْ against عَلِّمِتْ, طالَعَتْ against طالْعِتْ.
+
+Others worth vowelising for the same reason: كِدَه، لِيه، عَشان، المَيَّة،
+جِدُّو، الفَرَّان، السِّكَّة، الجِنِينَة، بِيِنْفُخ، بِيْساعْدوا، بِتِسْأَليه.
+
+## Words to write in Egyptian, not فصحى
+
+Separately from pronunciation, the owner caught a word that was simply the
+wrong one. This is about the script, not the voice, and it matters more:
+vowels can be fixed by re-narrating, but a فصحى word in the text is wrong on
+the page too.
+
+| Wrong (فصحى) | Right (مصري) | |
+|---|---|---|
+| بيصفقوا | بيصقفوا | to clap |
+
+Higgsfield wrote بيصفقوا into طيارة نور when it was inventing its own Arabic.
+Both stories written here use يصقف correctly. **Anything Higgsfield writes in
+Arabic needs reading for فصحى creeping in**, which is a second reason to
+supply the script rather than let it write one.
 
 Put a direction tag on the first line — `[حكاية للأطفال، لهجة مصرية عامية،
 صوت دافي وهادي وفرحان]`. ElevenLabs v3 treats a bracketed line as direction
