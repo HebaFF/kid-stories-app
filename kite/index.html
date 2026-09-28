@@ -99,17 +99,6 @@
   }
   .moral p { margin: 0; font-size: clamp(19px, 5vw, 23px); line-height: 1.9; }
 
-  /* Two takes of the same film, different narrators. Stamps, not pills —
-     the same control the app uses for its language and age filters. */
-  .voices { display:flex; gap:10px; flex-wrap:wrap; padding: 0 18px 18px; }
-  .voices button {
-    min-height: 46px; padding: 0 16px;
-    font-family: Lalezar, cursive; font-size: 15px;
-    color: var(--ink); background: transparent;
-    border: 2px solid var(--ink); cursor: pointer;
-  }
-  .voices button[aria-pressed="true"] { background: var(--ink); color: var(--plate); }
-
   .back {
     display:inline-block; margin-top: 22px; min-height: 46px;
     font-family: Lalezar, cursive; font-size: 17px; line-height: 46px;
@@ -128,16 +117,12 @@
   <main>
     <div class="plate">
       <video id="film" controls playsinline preload="metadata" poster="poster.jpg"
-             src="kite-soraya.mp4">
-        متصفحك مش بيشغّل الفيديو. <a href="kite-soraya.mp4">نزّل الحكاية من هنا</a>.
+             src="kite-story.mp4">
+        متصفحك مش بيشغّل الفيديو. <a href="kite-story.mp4">نزّل الحكاية من هنا</a>.
       </video>
       <div class="caption">
         <h1>طيارة نور</h1>
         <p class="meta">دقيقة واحدة · بالمصري · من ٤ سنين</p>
-      </div>
-      <div class="voices">
-        <button type="button" data-src="kite-soraya.mp4" aria-pressed="true">صوت ١</button>
-        <button type="button" data-src="kite-story.mp4" aria-pressed="false">صوت ٢</button>
       </div>
     </div>
 
@@ -149,30 +134,5 @@
     <a class="back" href="../">كل الحكايات ←</a>
   </main>
 
-<script>
-  // Swapping the source resets the element, so keep the position and carry on
-  // playing — the two takes are the same 60 seconds frame for frame, which is
-  // the whole point of being able to switch between them mid-sentence.
-  (function () {
-    var film = document.getElementById('film');
-    var buttons = document.querySelectorAll('.voices button');
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () {
-        if (b.getAttribute('aria-pressed') === 'true') return;
-        var at = film.currentTime;
-        var wasPlaying = !film.paused && !film.ended;
-        buttons.forEach(function (o) {
-          o.setAttribute('aria-pressed', String(o === b));
-        });
-        film.src = b.dataset.src;
-        film.addEventListener('loadedmetadata', function once() {
-          film.removeEventListener('loadedmetadata', once);
-          try { film.currentTime = at; } catch (e) { /* seek may be refused before buffering */ }
-          if (wasPlaying) film.play().catch(function () { /* autoplay may be blocked */ });
-        });
-      });
-    });
-  })();
-</script>
 </body>
 </html>
