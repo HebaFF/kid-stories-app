@@ -77,7 +77,19 @@ export default function HomeScreen({ navigation }: Props) {
     [age, mood]
   );
 
-  const [lead, ...rest] = stories;
+  /**
+   * The lead is the one plate that gets a full-width slot, so it goes to a
+   * story that has a picture to put in it. Taking the first story in the list
+   * gave the showcase position to whatever happened to sort first — usually an
+   * artless plate, which at desktop width is six hundred pixels of flat ink
+   * above three illustrated stories in small tiles. Most of the library has no
+   * art yet, so this will matter until it does.
+   */
+  const { lead, rest } = useMemo(() => {
+    const illustrated = stories.findIndex((story) => illustrationFor(story.id, 0));
+    const at = illustrated === -1 ? 0 : illustrated;
+    return { lead: stories[at], rest: stories.filter((_, i) => i !== at) };
+  }, [stories]);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.ground }]}>
@@ -294,7 +306,15 @@ function StoryPlate({
       style={({ pressed }) => [style, pressed && styles.pressed]}
     >
       <Plate theme={theme} style={lead ? styles.leadPlate : styles.plate}>
-        <View style={[styles.block, { aspectRatio: lead ? 16 / 10 : 4 / 3, borderBottomColor: theme.ink }]}>
+        {/* A block with no picture in it does not deserve the height of one that
+            has: an artless lead is cut shorter so it is a masthead rather than
+            an empty field. */}
+        <View
+          style={[
+            styles.block,
+            { aspectRatio: lead ? (art ? 16 / 10 : 16 / 9) : 4 / 3, borderBottomColor: theme.ink },
+          ]}
+        >
           {art ? (
             <>
               <Image source={art} style={styles.art} resizeMode="cover" />
