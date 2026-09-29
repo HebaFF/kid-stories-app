@@ -73,9 +73,9 @@ export const EGYPTIAN_STORIES: Story[] = [
       {
         illustration: `${PASTEL}. Close warm view of the delighted boy crouching with wide eyes and a huge smile in front of the pot, where one tiny bright green shoot has appeared, his hands cupped around it, bright morning sun on the balcony`,
         text: {
-          en: 'Then one morning there it was: a tiny green leaf, no bigger than his thumbnail, standing up in the middle of the soil. Malek shouted so happily that Grandma Samia came out laughing to see it too.',
-          'ar-EG': 'وفي يوم الصبح، لقاها: ورقة خضرا صغيرة قد ظفره، واقفة في نص الطين. مالك زعق من الفرحة، وتيتة سامية خرجت وهي بتضحك عشان تشوفها هي كمان.',
-          'ar-MSA': 'وَذاتَ صَباحٍ وَجَدَها: وَرَقَةٌ خَضْراءُ صَغيرَةٌ بِحَجْمِ ظُفْرِه، واقِفَةٌ في وَسَطِ التُّراب. صاحَ مالِكٌ مِنَ الفَرَح، وَخَرَجَتْ تيتة سامْيَة ضاحِكَةً لِتَراها هِيَ أَيْضًا.',
+          en: 'Then one morning there it was: a tiny green leaf, no bigger than his thumbnail, standing up in the middle of the soil. Malek jumped for joy and called Grandma Samia, and she came out laughing to see it too.',
+          'ar-EG': 'وفي يوم الصبح، لقاها: ورقة خضرا صغيرة قد ظفره، واقفة في نص الطين. مالك نطّ من الفرحة ونادى على تيتة سامية، وهي خرجت وهي بتضحك عشان تشوفها هي كمان.',
+          'ar-MSA': 'وَذاتَ صَباحٍ وَجَدَها: وَرَقَةٌ خَضْراءُ صَغيرَةٌ بِحَجْمِ ظُفْرِه، واقِفَةٌ في وَسَطِ التُّراب. قَفَزَ مالِكٌ مِنَ الفَرَحِ وَنادى تيتة سامْيَة، فَخَرَجَتْ ضاحِكَةً لِتَراها هِيَ أَيْضًا.',
         },
       },
       {
