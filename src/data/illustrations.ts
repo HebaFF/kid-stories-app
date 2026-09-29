@@ -37,6 +37,18 @@ export const ILLUSTRATIONS: Record<string, ImageSourcePropType[]> = {
     require('../../assets/illustrations/a-million-questions/3.jpg'),
     require('../../assets/illustrations/a-million-questions/4.jpg'),
   ],
+  // Drawn by Gemini (Nano Banana 2 Lite) in Google AI Studio rather than by
+  // Higgsfield: free on the owner's Pro account against about 26 credits a
+  // story, and more specifically Cairo — satellite dishes on the neighbouring
+  // roofs, minarets in the haze, geraniums on the railing. All four came out of
+  // one conversation, which is what keeps the boy and his grandmother the same
+  // people across the pages.
+  'maleks-seed': [
+    require('../../assets/illustrations/maleks-seed/1.jpg'),
+    require('../../assets/illustrations/maleks-seed/2.jpg'),
+    require('../../assets/illustrations/maleks-seed/3.jpg'),
+    require('../../assets/illustrations/maleks-seed/4.jpg'),
+  ],
 };
 
 export function illustrationFor(
