@@ -49,6 +49,16 @@ export const ILLUSTRATIONS: Record<string, ImageSourcePropType[]> = {
     require('../../assets/illustrations/maleks-seed/3.jpg'),
     require('../../assets/illustrations/maleks-seed/4.jpg'),
   ],
+  // Also Gemini, also free. Generated 16:9 because a fresh AI Studio chat
+  // resets the aspect ratio, so each page is cropped to 4:3 by hand rather
+  // than left to the reader to clip — the offsets follow where the children
+  // actually are in each frame.
+  'the-train-to-the-sea': [
+    require('../../assets/illustrations/the-train-to-the-sea/1.jpg'),
+    require('../../assets/illustrations/the-train-to-the-sea/2.jpg'),
+    require('../../assets/illustrations/the-train-to-the-sea/3.jpg'),
+    require('../../assets/illustrations/the-train-to-the-sea/4.jpg'),
+  ],
 };
 
 export function illustrationFor(
