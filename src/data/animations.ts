@@ -43,6 +43,16 @@ export const ANIMATIONS: Record<string, (number | null)[]> = {
     require('../../assets/illustrations/a-million-questions/3.mp4'),
     require('../../assets/illustrations/a-million-questions/4.mp4'),
   ],
+  // Kling, from frames generated inside Higgsfield rather than uploaded to it —
+  // its own Animate button carries its own images across correctly, which four
+  // different upload methods would not. Each clip is the five-second render
+  // played forward then backwards so it loops without a jump.
+  'maleks-seed': [
+    require('../../assets/illustrations/maleks-seed/1.mp4'),
+    require('../../assets/illustrations/maleks-seed/2.mp4'),
+    require('../../assets/illustrations/maleks-seed/3.mp4'),
+    require('../../assets/illustrations/maleks-seed/4.mp4'),
+  ],
 };
 
 export function animationFor(storyId: string, pageIndex: number): number | undefined {
