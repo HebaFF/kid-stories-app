@@ -59,6 +59,15 @@ export const ILLUSTRATIONS: Record<string, ImageSourcePropType[]> = {
     require('../../assets/illustrations/the-train-to-the-sea/3.jpg'),
     require('../../assets/illustrations/the-train-to-the-sea/4.jpg'),
   ],
+  // Gemini again, free. The boy is deliberately his own character — navy school
+  // uniform, straight black hair — so he reads as neither مالك nor زياد; no two
+  // stories in this library share a child.
+  'day-at-the-museum': [
+    require('../../assets/illustrations/day-at-the-museum/1.jpg'),
+    require('../../assets/illustrations/day-at-the-museum/2.jpg'),
+    require('../../assets/illustrations/day-at-the-museum/3.jpg'),
+    require('../../assets/illustrations/day-at-the-museum/4.jpg'),
+  ],
 };
 
 export function illustrationFor(
